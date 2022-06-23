@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "312102316451",
+    "project_id": "brindavan-student-app",
+    "storage_bucket": "brindavan-student-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312102316451:android:7c4a0a32ec2a63e5d0d216",
+        "android_client_info": {
+          "package_name": "com.example.brindavan_student"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312102316451-sgdk3l4ro037qtm71jcun8romv7vj3mv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4jAsQqE2MjMZTNpXe0WqXgQx8zY_KQCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312102316451-sgdk3l4ro037qtm71jcun8romv7vj3mv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
