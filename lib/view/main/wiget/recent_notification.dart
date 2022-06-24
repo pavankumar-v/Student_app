@@ -19,7 +19,7 @@ class _RecentNotificationState extends State<RecentNotification> {
   @override
   void initState() {
     final dataProvider = Provider.of<DataProvider>(context, listen: false);
-    notificationData = dataProvider.notifications;
+    notificationData = dataProvider.notificationBySection;
 
     super.initState();
   }

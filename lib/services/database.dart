@@ -10,7 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 class DatabaseService {
   String? branch;
   String? sem;
-  DatabaseService({this.branch, this.sem});
+  String? section;
+  DatabaseService({this.branch, this.sem, this.section});
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
 
@@ -86,21 +87,17 @@ class DatabaseService {
   }
 
   //stream DataNotifcation
-  Stream<List<NotificationData?>?> getNotifications() {
-    print('notification Stream Called');
+  Stream<List<NotificationData?>?> getNotifications(filterString) {
+    print(filterString);
     return _db
         .collection('notifications')
         .orderBy('createdAt', descending: true)
-        // .where("tags", arrayContains: "cse")
+        .where("tags", arrayContains: filterString.toString().toLowerCase())
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => NotificationData.fromJson(doc.data()))
             .toList());
   }
-
-  // Future<dynamic> getDocs(){
-
-  // }
 
   Stream<List<DynamicFormData?>?> getForms() {
     return _db

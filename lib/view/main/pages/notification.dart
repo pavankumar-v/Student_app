@@ -1,5 +1,6 @@
 import 'package:brindavan_student/models/notificationdata.dart';
 import 'package:brindavan_student/provider/data_provider.dart';
+import 'package:brindavan_student/theme/theme_provider.dart';
 import 'package:brindavan_student/view/main/reusable_widget/notification_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:brindavan_student/utils/loading.dart';
@@ -15,13 +16,16 @@ class NotificationList extends StatefulWidget {
 
 class _NotificationListState extends State<NotificationList> {
   bool loading = false;
-  Stream<List<NotificationData?>?>? notificationData;
+  Stream<List<NotificationData?>?>? notificationDataAll;
+  Stream<List<NotificationData?>?>? notificationDataBySection;
+  Stream<List<NotificationData?>?>? notificationDataByBranch;
 
   @override
   void initState() {
     final dataProvider = Provider.of<DataProvider>(context, listen: false);
-    notificationData = dataProvider.notifications;
-
+    notificationDataAll = dataProvider.notificationAll;
+    notificationDataBySection = dataProvider.notificationBySection;
+    notificationDataByBranch = dataProvider.notificationByBranch;
     // _notificationData = _dataProvider.notifications;
 
     super.initState();
@@ -35,60 +39,115 @@ class _NotificationListState extends State<NotificationList> {
 
   @override
   Widget build(BuildContext context) {
-    final dataProvider = Provider.of<DataProvider>(context);
+    var MyColor = Theme.of(context).extension<MyColors>()!;
 
     return loading
         ? const Loading()
         : DefaultTabController(
-          length: 3,
-          child: Scaffold(
+            length: 3,
+            child: Scaffold(
               backgroundColor: Theme.of(context).backgroundColor,
               appBar: AppBar(
-                  elevation: 0, title: 'Notification'.text.xl3.bold.center.make(),
-                  bottom: TabBar(
+                elevation: 0,
+                title: 'Notification'.text.xl3.bold.center.make(),
+                bottom: TabBar(
+                    indicatorColor: Theme.of(context).primaryColor,
                     tabs: [
                       Tab(
-                        child:Text('Class',
-                        style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black))),
+                          child: Text('Class',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: MyColor.textColor))),
                       Tab(
-                        child:Text('HOD',
-                        style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black))),
+                          child: Text('Branch',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: MyColor.textColor))),
                       Tab(
-                        child:Text('College',
-                        style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black))),
-
-                    ] ),),
-              body: TabBarView(
-                children: [
-                  Center(child: Text('Tab 1 Content')),
-                  Center(child: Text('Tab 2  Content')),
-                  Center(
-                    child: StreamBuilder<List<NotificationData?>?>(
-                  stream: notificationData,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          addAutomaticKeepAlives: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            var data = snapshot.data![index];
-                            return NotificationWidget(notification: data)
-                                .px(20); // passing into widget constructor
-                          });
-                    } else {
-                      return Center(
-                        child: "Noting Found"
-                            .text
-                            .lg
-                            .bold
-                            .color(Theme.of(context).hintColor)
-                            .make(),
-                      );
-                    }
-                  }
-                 ), ),
-              ]),  
+                          child: Text('College',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: MyColor.textColor))),
+                    ]),
+              ),
+              body: TabBarView(children: [
+                Center(
+                  child: StreamBuilder<List<NotificationData?>?>(
+                      stream: notificationDataBySection,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                              addAutomaticKeepAlives: true,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                var data = snapshot.data![index];
+                                return NotificationWidget(notification: data)
+                                    .px(20); // passing into widget constructor
+                              });
+                        } else {
+                          return Center(
+                            child: "Noting Found"
+                                .text
+                                .lg
+                                .bold
+                                .color(Theme.of(context).hintColor)
+                                .make(),
+                          );
+                        }
+                      }),
                 ),
-        );
+                Center(
+                  child: StreamBuilder<List<NotificationData?>?>(
+                      stream: notificationDataByBranch,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                              addAutomaticKeepAlives: true,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                var data = snapshot.data![index];
+                                return NotificationWidget(notification: data)
+                                    .px(20); // passing into widget constructor
+                              });
+                        } else {
+                          return Center(
+                            child: "Noting Found"
+                                .text
+                                .lg
+                                .bold
+                                .color(Theme.of(context).hintColor)
+                                .make(),
+                          );
+                        }
+                      }),
+                ),
+                Center(
+                  child: StreamBuilder<List<NotificationData?>?>(
+                      stream: notificationDataAll,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                              addAutomaticKeepAlives: true,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                var data = snapshot.data![index];
+                                return NotificationWidget(notification: data)
+                                    .px(20); // passing into widget constructor
+                              });
+                        } else {
+                          return Center(
+                            child: "Noting Found"
+                                .text
+                                .lg
+                                .bold
+                                .color(Theme.of(context).hintColor)
+                                .make(),
+                          );
+                        }
+                      }),
+                ),
+              ]),
+            ),
+          );
   }
 }

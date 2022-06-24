@@ -40,10 +40,11 @@ class Styles {
     return ThemeData(
       extensions: <ThemeExtension<dynamic>>[
         MyColors(
-            brandColor:
-                isDarkTheme ? const Color(0xFF1E88E5) : velx.Vx.amber300,
-            danger: const Color(0xFFE53935),
-            backgroundSecondary: const Color(0xFFEDF0FF)),
+          brandColor: isDarkTheme ? const Color(0xFF1E88E5) : velx.Vx.amber300,
+          danger: const Color(0xFFE53935),
+          backgroundSecondary: const Color(0xFFEDF0FF),
+          textColor: isDarkTheme ? Colors.white : Colors.black,
+        ),
       ],
       fontFamily: GoogleFonts.montserrat().fontFamily,
       primaryColor: isDarkTheme ? primaryColor : primaryColor,
@@ -79,18 +80,21 @@ class MyColors extends ThemeExtension<MyColors> {
     required this.brandColor,
     required this.danger,
     required this.backgroundSecondary,
+    required this.textColor,
   });
 
   final Color? brandColor;
   final Color? danger;
   final Color? backgroundSecondary;
+  final Color? textColor;
 
   @override
   MyColors copyWith({Color? brandColor, Color? danger}) {
     return MyColors(
       brandColor: brandColor ?? this.brandColor,
       danger: danger ?? this.danger,
-      backgroundSecondary: danger ?? backgroundSecondary,
+      backgroundSecondary: backgroundSecondary ?? backgroundSecondary,
+      textColor: textColor ?? textColor,
     );
   }
 
@@ -102,7 +106,9 @@ class MyColors extends ThemeExtension<MyColors> {
     return MyColors(
       brandColor: Color.lerp(brandColor, other.brandColor, t),
       danger: Color.lerp(danger, other.danger, t),
-      backgroundSecondary: Color.lerp(danger, other.backgroundSecondary, t),
+      backgroundSecondary:
+          Color.lerp(backgroundSecondary, other.backgroundSecondary, t),
+      textColor: Color.lerp(textColor, other.textColor, t),
     );
   }
 }

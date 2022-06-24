@@ -5,6 +5,8 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../theme/theme_provider.dart';
+
 class NotificationWidget extends StatefulWidget {
   final NotificationData? notification;
   const NotificationWidget({Key? key, required this.notification})
@@ -27,6 +29,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var MyColor = Theme.of(context).extension<MyColors>()!;
     var data = widget.notification;
     return Container(
       decoration: BoxDecoration(
@@ -42,13 +45,31 @@ class _NotificationWidgetState extends State<NotificationWidget> {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(data!.avatar),
+                  backgroundColor: data!.position == "Admin"
+                      ? Vx.hexToColor('#00A47A')
+                      : data.position == "hod"
+                          ? Vx.hexToColor('#FFBA24')
+                          : Vx.hexToColor('#0057D0'),
+                  child: data.fullName[0].text.bold.color(Colors.white).make(),
+                  // backgroundImage: NetworkImage(data!.avatar),
                 ),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   data.fullName.text.bold.make(),
                   Row(
                     children: [
-                      data.position.text.uppercase.lineHeight(1.5).sm.make(),
+                      (data.department == "ALL" ? "" : data.department)
+                          .text
+                          .uppercase
+                          .lineHeight(1.5)
+                          .sm
+                          .make()
+                          .pLTRB(0, 0, 5, 0),
+                      (data.position == "Admin" ? "Principle" : data.position)
+                          .text
+                          .uppercase
+                          .lineHeight(1.5)
+                          .sm
+                          .make(),
                       (formatDate(DateTime.parse(data.createdAt),
                               [MM, ' ', d, ', ', yyyy]))
                           .text
@@ -93,14 +114,39 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 await _launchInBrowser(url);
               },
               options: const LinkifyOptions(humanize: false),
-              style: const TextStyle(height: 1.5, fontSize: 12),
+              style: const TextStyle(height: 1.5, fontSize: 14),
             ),
 
-            "${data.tags}".text.make()
+            Row(
+              children: [
+                for (var i in data.tags)
+                  Chip(
+                    backgroundColor: Theme.of(context).dividerColor,
+                    avatar: CircleAvatar(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      backgroundImage: NetworkImage(data.avatar),
+                    ),
+                    label: "#$i"
+                        .text
+                        .sm
+                        .uppercase
+                        .bold
+                        .color(MyColor.textColor)
+                        .make(),
+                  )
+              ],
+            )
+
             // data.description.text.lineHeight(1.5).sm.make(),
           ],
         ).p(23),
       ]),
     ).py12();
   }
+
+  // _chipBuilder(tags){
+  //   return Row(
+
+  //   )
+  // }
 }

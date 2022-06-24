@@ -31,7 +31,8 @@ class Wrapper extends StatelessWidget {
               return ChangeNotifierProvider(
                   create: (context) => DataProvider(
                       branch: snapshot.data!.branch,
-                      sem: snapshot.data!.sem.toString()),
+                      sem: snapshot.data!.sem.toString(),
+                      section: snapshot.data!.section),
                   child: const Navigate());
             } else {
               return const Loading();

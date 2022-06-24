@@ -4,6 +4,7 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:velocity_x/velocity_x.dart';
+import '../../../theme/theme_provider.dart';
 import '../reusable_widget/attendance_card.dart';
 
 class Attendance extends StatefulWidget {
@@ -31,6 +32,8 @@ class _AttendanceState extends State<Attendance> {
 
   @override
   Widget build(BuildContext context) {
+    var MyColor = Theme.of(context).extension<MyColors>()!;
+
     return Scaffold(
       // key: Provider.of<DateKeyProvider>(context).key,
       appBar: AppBar(
@@ -47,9 +50,19 @@ class _AttendanceState extends State<Attendance> {
                 IconButton(
                     onPressed: () async {
                       DateTime? newDate = await showDatePicker(
+                          builder: (context, child) => Theme(
+                              data: ThemeData().copyWith(
+                                colorScheme: ColorScheme.light(
+                                  primary: Theme.of(context).primaryColor,
+                                  // onPrimary: Colors.white
+                                ),
+                                dialogBackgroundColor:
+                                    Theme.of(context).backgroundColor,
+                              ),
+                              child: child!),
                           initialDate: _dateTime,
-                          firstDate: DateTime(1800),
-                          lastDate: DateTime(2050),
+                          firstDate: DateTime(2008),
+                          lastDate: DateTime.now(),
                           context: context);
                       if (newDate != null) {
                         setState(() {

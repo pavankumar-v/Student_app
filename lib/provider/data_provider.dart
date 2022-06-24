@@ -8,13 +8,18 @@ import 'package:flutter/material.dart';
 class DataProvider with ChangeNotifier {
   final String? branch;
   final String? sem;
-  DataProvider({this.branch, this.sem});
+  final String? section;
+  DataProvider({this.branch, this.sem, this.section});
 
   Stream<List<DynamicFormData?>?> get forms => DatabaseService().getForms();
   Stream<UserData> get userData => DatabaseService().curUserData();
   Stream<List<Subjects?>?> get usersubjects =>
       DatabaseService(branch: branch, sem: sem).getSubjects();
 
-  Stream<List<NotificationData?>?> get notifications =>
-      DatabaseService().getNotifications();
+  Stream<List<NotificationData?>?> get notificationByBranch =>
+      DatabaseService().getNotifications(branch);
+  Stream<List<NotificationData?>?> get notificationBySection =>
+      DatabaseService().getNotifications((branch! + sem! + section!));
+  Stream<List<NotificationData?>?> get notificationAll =>
+      DatabaseService().getNotifications("all");
 }

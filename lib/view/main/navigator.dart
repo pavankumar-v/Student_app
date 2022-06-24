@@ -20,6 +20,8 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import '../../theme/theme_provider.dart';
+
 class Navigate extends StatefulWidget {
   const Navigate({Key? key}) : super(key: key);
 
@@ -75,6 +77,7 @@ class _NavigateState extends State<Navigate>
 
   @override
   Widget build(BuildContext context) {
+    var MyColor = Theme.of(context).extension<MyColors>()!;
     final user = Provider.of<MyUser?>(context);
     var buttonStyle = ElevatedButton.styleFrom(
       elevation: 10,
@@ -218,8 +221,10 @@ class _NavigateState extends State<Navigate>
                                             });
                                           },
                                           child: ListTile(
-                                            leading: const Icon(
-                                                Icons.person_rounded),
+                                            leading: Icon(
+                                              Icons.person_rounded,
+                                              color: MyColor.textColor,
+                                            ),
                                             title: 'Profile'.text.make(),
                                           ),
                                         ).p12(),
@@ -236,8 +241,10 @@ class _NavigateState extends State<Navigate>
                                             });
                                           },
                                           child: ListTile(
-                                            leading: const Icon(
-                                                Icons.palette_rounded),
+                                            leading: Icon(
+                                              Icons.palette_rounded,
+                                              color: MyColor.textColor,
+                                            ),
                                             title: 'Theme'.text.make(),
                                           ),
                                         ).p12(),
@@ -256,8 +263,9 @@ class _NavigateState extends State<Navigate>
                                             });
                                           },
                                           child: ListTile(
-                                            leading: const Icon(
+                                            leading: Icon(
                                               Icons.app_registration_rounded,
+                                              color: MyColor.textColor,
                                             ),
                                             title: 'Attendace'.text.make(),
                                           ),
@@ -275,8 +283,9 @@ class _NavigateState extends State<Navigate>
                                             });
                                           },
                                           child: ListTile(
-                                            leading: const Icon(
+                                            leading: Icon(
                                               Icons.description_rounded,
+                                              color: MyColor.textColor,
                                             ),
                                             title: 'Forms'.text.make(),
                                           ),
@@ -295,8 +304,10 @@ class _NavigateState extends State<Navigate>
                                             });
                                           },
                                           child: ListTile(
-                                            leading: const Icon(
-                                                Icons.logout_rounded),
+                                            leading: Icon(
+                                              Icons.logout_rounded,
+                                              color: MyColor.textColor,
+                                            ),
                                             title: 'Sign Out'.text.make(),
                                           ),
                                         ).p12(),
