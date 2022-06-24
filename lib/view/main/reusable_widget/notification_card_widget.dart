@@ -1,4 +1,5 @@
 import 'package:brindavan_student/models/notificationdata.dart';
+import 'package:brindavan_student/view/main/reusable_widget/read_more_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:date_format/date_format.dart';
@@ -17,16 +18,6 @@ class NotificationWidget extends StatefulWidget {
 }
 
 class _NotificationWidgetState extends State<NotificationWidget> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     var MyColor = Theme.of(context).extension<MyColors>()!;
@@ -98,7 +89,10 @@ class _NotificationWidgetState extends State<NotificationWidget> {
             ),
 
             SelectableLinkify(
-              text: data.description,
+              // text: data.description,
+              text: data.description.length > 250
+                  ? "${data.description.substring(0, ((data.description.length / 100) * 85).floor())} ........"
+                  : data.description,
               onOpen: (link) async {
                 final Uri url = Uri.parse(link.url);
 
@@ -120,20 +114,36 @@ class _NotificationWidgetState extends State<NotificationWidget> {
             Row(
               children: [
                 for (var i in data.tags)
-                  Chip(
-                    backgroundColor: Theme.of(context).dividerColor,
-                    avatar: CircleAvatar(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      backgroundImage: NetworkImage(data.avatar),
+                  Transform(
+                    transform: Matrix4.identity()..scale(0.8),
+                    child: Chip(
+                      backgroundColor: Theme.of(context).dividerColor,
+                      avatar: CircleAvatar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundImage: NetworkImage(data.avatar),
+                      ),
+                      label: "#$i"
+                          .text
+                          .sm
+                          .uppercase
+                          .bold
+                          .overflow(TextOverflow.ellipsis)
+                          .color(MyColor.textColor)
+                          .make(),
                     ),
-                    label: "#$i"
-                        .text
-                        .sm
-                        .uppercase
-                        .bold
-                        .color(MyColor.textColor)
-                        .make(),
-                  )
+                  ),
+              ],
+            ).py(5),
+            Row(
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ReadMoreNotification(
+                                notification: data,
+                              )));
+                    },
+                    child: "read more".text.sm.make())
               ],
             )
 
