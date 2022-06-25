@@ -256,7 +256,7 @@ class _RegisterState extends State<Register> {
                                               setState(() {
                                                 error =
                                                     'USN is already registered or Not available for registration';
-                                                loading = false;
+                                                _pageLoading = false;
                                               });
                                             }
                                           }
