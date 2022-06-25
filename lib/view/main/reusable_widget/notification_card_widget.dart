@@ -91,7 +91,8 @@ class _NotificationWidgetState extends State<NotificationWidget> {
             SelectableLinkify(
               // text: data.description,
               text: data.description.length > 250
-                  ? "${data.description.substring(0, ((data.description.length / 100) * 85).floor())} ........"
+              ? "${data.description.substring(0, 249)} ........"
+                  // ? "${data.description.substring(0, ((data.description.length / 100) * 85).floor())} ........"
                   : data.description,
               onOpen: (link) async {
                 final Uri url = Uri.parse(link.url);
