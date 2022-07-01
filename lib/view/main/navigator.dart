@@ -135,12 +135,12 @@ class _NavigateState extends State<Navigate>
                               icon: Icon(Icons.notifications),
                               label: 'Notification',
                             ),
-                            BottomNavigationBarItem(
-                              icon: Icon(
-                                Icons.business_outlined,
-                              ),
-                              label: 'Placements',
-                            ),
+                            // BottomNavigationBarItem(
+                            //   icon: Icon(
+                            //     Icons.business_outlined,
+                            //   ),
+                            //   label: 'Placements',
+                            // ),
                           ],
                           onTap: (index) {
                             setState(() {

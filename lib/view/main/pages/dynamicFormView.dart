@@ -49,22 +49,6 @@ class _DynamicFormPAgeState extends State<DynamicFormPAge> {
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
         title: data!.name.text.make(),
-        actions: [
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  _count++;
-                });
-              },
-              icon: const Icon(Icons.add)),
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  _count = 0;
-                });
-              },
-              icon: const Icon(Icons.refresh))
-        ],
       ),
       body: Container(
           padding: const EdgeInsets.all(20.0),

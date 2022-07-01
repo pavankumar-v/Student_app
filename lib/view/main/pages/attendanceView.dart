@@ -17,11 +17,7 @@ class Attendance extends StatefulWidget {
 
 class _AttendanceState extends State<Attendance> {
   // variables
-  final Stream<QuerySnapshot> _userStream = FirebaseFirestore.instance
-      .collection('branch')
-      .doc('cse')
-      .collection('8')
-      .snapshots();
+
   final DatePickerController _controller = DatePickerController();
   void executeAfterBuild() {
     _controller.animateToSelection();
@@ -32,12 +28,19 @@ class _AttendanceState extends State<Attendance> {
 
   @override
   Widget build(BuildContext context) {
+    final Stream<QuerySnapshot> userStream = FirebaseFirestore.instance
+        .collection('branch')
+        .doc(widget.userData.branch.toLowerCase())
+        .collection(widget.userData.sem.toString())
+        .snapshots();
     var MyColor = Theme.of(context).extension<MyColors>()!;
 
     return Scaffold(
       // key: Provider.of<DateKeyProvider>(context).key,
       appBar: AppBar(
-        title: 'Attendance'.text.make(),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+        title: 'Attendance'.text.bold.letterSpacing(1).make(),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -74,7 +77,7 @@ class _AttendanceState extends State<Attendance> {
               ],
             ),
             StreamBuilder<QuerySnapshot>(
-                stream: _userStream,
+                stream: userStream,
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
@@ -93,10 +96,16 @@ class _AttendanceState extends State<Attendance> {
                             document.data()! as Map<String, dynamic>;
 
                         if (data['attendance'][date] == null) {
-                          return '${data['id']} No class'.text.center.xl.make();
+                          return '${data['name'].length > 20 ? data['name'].substring(0, 13) + "... - " : data['name'] + "-"} No class taken'
+                              .text
+                              .bold
+                              .center
+                              .color(Theme.of(context).hintColor)
+                              .xl
+                              .make()
+                              .p12();
                         }
                         List<dynamic> attendance = data['attendance'][date];
-
                         List<dynamic> attendanceList = attendance
                             .where((val) => val.startsWith(
                                 widget.userData.usn.toString().toUpperCase()))

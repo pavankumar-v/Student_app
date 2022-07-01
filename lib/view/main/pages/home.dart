@@ -112,13 +112,7 @@ class _HomeState extends State<Home> {
                               .make()
                               .p(25),
                         ).py(20),
-                        'Notification'
-                            .text
-                            .size(30)
-                            .bold
-                            .letterSpacing(1.5)
-                            .make()
-                            .py12(),
+                        'Recent '.text.size(30).bold.make().py12(),
                         const RecentNotification(),
                       ],
                     ).px(17),

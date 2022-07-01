@@ -43,7 +43,7 @@ class Styles {
           brandColor: isDarkTheme ? const Color(0xFF1E88E5) : velx.Vx.amber300,
           danger: const Color(0xFFE53935),
           backgroundSecondary: const Color(0xFFEDF0FF),
-          textColor: isDarkTheme ? Colors.white : Colors.black,
+          textColor: isDarkTheme ? Colors.white : velx.Vx.hexToColor("#333333"),
         ),
       ],
       fontFamily: GoogleFonts.montserrat().fontFamily,

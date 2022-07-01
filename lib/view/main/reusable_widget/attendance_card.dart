@@ -6,8 +6,13 @@ class AttendanceCard extends StatefulWidget {
   final String? subId;
   final String? usnString;
   final String? dateTime;
-   
-  const AttendanceCard({Key? key, required this.subId, required this.usnString, required this.dateTime}) : super(key: key);
+
+  const AttendanceCard(
+      {Key? key,
+      required this.subId,
+      required this.usnString,
+      required this.dateTime})
+      : super(key: key);
 
   @override
   State<AttendanceCard> createState() => _AttendanceCardState();
@@ -16,14 +21,13 @@ class AttendanceCard extends StatefulWidget {
 class _AttendanceCardState extends State<AttendanceCard> {
   @override
   Widget build(BuildContext context) {
-  String? usnString = widget.usnString;
-  bool present = usnString![usnString.length - 1] == '1' ? true: false ;
+    String? usnString = widget.usnString;
+    bool present = usnString![usnString.length - 1] == '1' ? true : false;
 
-print(DateFormat('MMMEd').format(widget.dateTime!.toDate()!));
-  //  dateFormating(){
+    print(DateFormat('MMMEd').format(widget.dateTime!.toDate()!));
+    //  dateFormating(){
 
-  // }
-  
+    // }
 
     return Card(
       margin: EdgeInsets.zero,
@@ -40,7 +44,8 @@ print(DateFormat('MMMEd').format(widget.dateTime!.toDate()!));
             height: 80,
             decoration: BoxDecoration(
               border: Border(
-                  left: BorderSide(color: present ? Colors.green : Colors.red, width: 10)),
+                  left: BorderSide(
+                      color: present ? Colors.green : Colors.red, width: 10)),
               color: Theme.of(context).cardColor,
             ),
             padding: const EdgeInsets.all(18.0),
@@ -51,13 +56,34 @@ print(DateFormat('MMMEd').format(widget.dateTime!.toDate()!));
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    widget.subId.toString().toUpperCase().text.bold.lg.make(),
+                    (widget.subId!.length > 18
+                            ? "${widget.subId!.substring(0, 17)}..."
+                            : widget.subId!)
+                        .toString()
+                        .capitalized
+                        .text
+                        .bold
+                        .xl
+                        .make(),
                     const Spacer(),
-                    '${DateFormat('MMMEd').format(widget.dateTime!.toDate()!)} - ${widget.usnString?.split('-')[1]}'.text.color(Theme.of(context).hintColor).bold.make()
+                    '${DateFormat('MMMEd').format(widget.dateTime!.toDate()!)} - ${widget.usnString?.split('-')[1]}'
+                        .text
+                        .color(Theme.of(context).hintColor)
+                        .bold
+                        .make()
                   ],
                 ),
                 const Spacer(),
-                (present ? 'Present' : 'Absent').text.bold.color((present ? Vx.hexToColor('#2ECC71') : Colors.red)).make().pLTRB(10, 5, 10, 5).card.color((present ? Vx.hexToColor('#2ECC71') : Colors.red).withAlpha(30)).make(),
+                (present ? 'Present' : 'Absent')
+                    .text
+                    .bold
+                    .color((present ? Vx.hexToColor('#2ECC71') : Colors.red))
+                    .make()
+                    .pLTRB(10, 5, 10, 5)
+                    .card
+                    .color((present ? Vx.hexToColor('#2ECC71') : Colors.red)
+                        .withAlpha(30))
+                    .make(),
               ],
             )),
       ),
