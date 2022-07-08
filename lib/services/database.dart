@@ -91,12 +91,32 @@ class DatabaseService {
     print(filterString);
     return _db
         .collection('notifications')
+        .limit(100)
         .orderBy('createdAt', descending: true)
         .where("tags", arrayContains: filterString.toString().toLowerCase())
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => NotificationData.fromJson(doc.data()))
+            .map((doc) => NotificationData.fromJson(doc.data(), doc.id))
             .toList());
+  }
+
+  // Add to stared notifications
+  void starNotification(notificationId) {
+    print(notificationId);
+    try {
+      _db.collection("users").doc(_auth.currentUser!.uid).set({
+        "StarredNotification": FieldValue.arrayUnion([notificationId])
+      }, SetOptions(merge: true)).then((value) => print("starred"));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //stared notification
+  Stream<NotificationData?> getStarredNotifications(docId) {
+    return _db.collection('users').doc(_auth.currentUser!.uid).snapshots().map(
+        (DocumentSnapshot<Map<String, dynamic>> doc) =>
+            NotificationData.fromJson(doc.data()!, doc.id));
   }
 
   Stream<List<DynamicFormData?>?> getForms() {

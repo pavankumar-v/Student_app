@@ -110,7 +110,6 @@ class _AttendanceState extends State<Attendance> {
                             .where((val) => val.startsWith(
                                 widget.userData.usn.toString().toUpperCase()))
                             .toList();
-
                         return ListView.builder(
                             addAutomaticKeepAlives: true,
                             physics: const NeverScrollableScrollPhysics(),

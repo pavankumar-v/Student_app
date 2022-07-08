@@ -48,8 +48,8 @@ class _NavigateState extends State<Navigate>
   int _currentIndex = 0;
   List<Widget> tabs = [
     const Home(),
-    const SubjectList(),
     const NotificationList(),
+    const SubjectList(),
     const PlacementsView()
   ];
 
@@ -127,13 +127,15 @@ class _NavigateState extends State<Navigate>
                               icon: Icon(Icons.home_rounded),
                               label: 'Home',
                             ),
-                            BottomNavigationBarItem(
-                              icon: Icon(Icons.article_rounded),
-                              label: 'Subjects',
-                            ),
+
                             BottomNavigationBarItem(
                               icon: Icon(Icons.notifications),
                               label: 'Notification',
+                            ),
+
+                            BottomNavigationBarItem(
+                              icon: Icon(Icons.article_rounded),
+                              label: 'Subjects',
                             ),
                             // BottomNavigationBarItem(
                             //   icon: Icon(
@@ -268,6 +270,30 @@ class _NavigateState extends State<Navigate>
                                               color: MyColor.textColor,
                                             ),
                                             title: 'Attendace'.text.make(),
+                                          ),
+                                        ).p12(),
+                                        ElevatedButton(
+                                          style: buttonStyle,
+                                          onPressed: () {
+                                            Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 200), () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Attendance(
+                                                            userData: userData,
+                                                          )));
+                                            });
+                                          },
+                                          child: ListTile(
+                                            leading: Icon(
+                                              Icons.grade_rounded,
+                                              color: MyColor.textColor,
+                                            ),
+                                            title: 'Starred Notification'
+                                                .text
+                                                .make(),
                                           ),
                                         ).p12(),
                                         ElevatedButton(

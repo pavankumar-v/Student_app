@@ -101,22 +101,20 @@ class TestService {
   void getsubData() {
     print('retriving sub data');
     _db.collection('dummy').get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
+      for (var result in querySnapshot.docs) {
         _db
             .collection('dummy')
             .doc(result.id)
             .collection('pets')
             .get()
             .then((querySnapshot) {
-          querySnapshot.docs.forEach((result) {
+          for (var result in querySnapshot.docs) {
             print(result.data());
-          });
+          }
         });
-      });
+      }
     });
   }
-
-
 
   getRealTimeData() {
     return _db
@@ -124,9 +122,9 @@ class TestService {
         .where('address.city', isEqualTo: 'ASIA')
         .snapshots()
         .listen((result) {
-      result.docs.forEach((result) {
+      for (var result in result.docs) {
         result.data();
-      });
+      }
     });
   }
 
@@ -149,8 +147,6 @@ class TestService {
             UserData.fromJson(snapshot.data()!['subjects']));
   }
 
-
-
   Stream<Subjects?>? getSubjects() {
     try {
       print('subjects Stream running');
@@ -163,22 +159,4 @@ class TestService {
       return null;
     }
   }
-
-  Future<List<NotificationData?>?> getFutureNoti() {
-    print('notification future Called');
-    return _db
-        .collection('notifications')
-        .where('createdAt',
-            isGreaterThan:
-                DateTime.now().add(Duration(days: -10)).toIso8601String())
-        .orderBy('createdAt', descending: true)
-        .get()
-        .then((value) => value.docs
-            .map((e) => NotificationData.fromJson(e.data()))
-            .toList());
-  }
-
-
-
- 
 }

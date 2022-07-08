@@ -1,4 +1,5 @@
 class NotificationData {
+  final String id;
   final String fullName;
   final String position;
   final String title;
@@ -9,6 +10,7 @@ class NotificationData {
   final String department;
 
   NotificationData({
+    required this.id,
     required this.fullName,
     required this.position,
     required this.title,
@@ -19,8 +21,9 @@ class NotificationData {
     required this.department,
   });
 
-  factory NotificationData.fromJson(Map<String, dynamic> json) {
+  factory NotificationData.fromJson(Map<String, dynamic> json, id) {
     return NotificationData(
+        id: id,
         fullName: json['fullName'],
         position: json['position'],
         title: json['title'],
@@ -30,16 +33,4 @@ class NotificationData {
         tags: json['tags'],
         department: json['department']);
   }
-
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'fullName': fullName,
-  //     'position': position,
-  //     'title': title,
-  //     'description': description,
-  //     'createdAt': createdAt,
-  //     ''
-
-  //   };
-  // }
 }
