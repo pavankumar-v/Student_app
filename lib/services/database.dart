@@ -58,6 +58,7 @@ class DatabaseService {
         'branch': branch,
         'avatar': url,
         'isActive': true,
+        'StarredNotification': []
       }, SetOptions(merge: true));
     } catch (e) {
       print(e.toString());
@@ -87,13 +88,13 @@ class DatabaseService {
   }
 
   //stream DataNotifcation
-  Stream<List<NotificationData?>?> getNotifications(filterString) {
-    print(filterString);
+  Stream<List<NotificationData?>?> getNotifications(filterArr) {
+    print(filterArr);
     return _db
         .collection('notifications')
         .limit(100)
         .orderBy('createdAt', descending: true)
-        .where("tags", arrayContains: filterString.toString().toLowerCase())
+        .where("tags", arrayContainsAny: filterArr)
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => NotificationData.fromJson(doc.data(), doc.id))
@@ -101,22 +102,46 @@ class DatabaseService {
   }
 
   // Add to stared notifications
-  void starNotification(notificationId) {
+  void starNotification(notificationId, fullName, title) {
     print(notificationId);
     try {
       _db.collection("users").doc(_auth.currentUser!.uid).set({
-        "StarredNotification": FieldValue.arrayUnion([notificationId])
+        "StarredNotification": FieldValue.arrayUnion([
+          {"id": notificationId, "fullName": fullName, "title": title}
+        ])
       }, SetOptions(merge: true)).then((value) => print("starred"));
     } catch (e) {
       print(e);
     }
   }
 
+  //
+  void removeFromStared(notificationId, fullName, title) {
+    try {
+      _db.collection("users").doc(_auth.currentUser!.uid).set({
+        "StarredNotification": FieldValue.arrayRemove([
+          {"id": notificationId, "fullName": fullName, "title": title}
+        ])
+      }, SetOptions(merge: true)).then((value) => print("removed"));
+    } catch (e) {
+      print(e);
+    }
+  }
+
   //stared notification
-  Stream<NotificationData?> getStarredNotifications(docId) {
-    return _db.collection('users').doc(_auth.currentUser!.uid).snapshots().map(
-        (DocumentSnapshot<Map<String, dynamic>> doc) =>
-            NotificationData.fromJson(doc.data()!, doc.id));
+  Future<dynamic>? getStarredNotifications(docId) async {
+    try {
+      var result = await _db
+          .collection('notifications')
+          .doc(docId)
+          .get()
+          .then((doc) => doc.data());
+      // print(result);
+      return result;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 
   Stream<List<DynamicFormData?>?> getForms() {

@@ -1,4 +1,3 @@
-import 'package:brindavan_student/models/notificationdata.dart';
 import 'package:brindavan_student/models/subjects.dart';
 import 'package:brindavan_student/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +6,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 class TestService {
   var firebaseUser = FirebaseAuth.instance.currentUser!;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  // void setFiled(docId) async {
+  //   try {
+  //     return await _db
+  //         .collection('users')
+  //         .doc(docId)
+  //         .set({"StarredNotification": []}, SetOptions(merge: true)).then(
+  //       (_) => print('success'),
+  //     );
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
+
+  // void fooUsers() async {
+  //   var res = _db
+  //       .collection("users")
+  //       .snapshots()
+  //       .map((snapshots) => snapshots.docs.map((doc) => doc.id))
+  //       .takeWhile((element) => true);
+
+  //   print(res.forEach((element) {
+  //     for (var docId in element) {
+  //       setFiled(docId);
+  //     }
+  //   }));
+  // }
 
   //test db
   void addData() {

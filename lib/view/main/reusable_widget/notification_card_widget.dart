@@ -1,6 +1,6 @@
 import 'package:brindavan_student/models/notificationdata.dart';
 import 'package:brindavan_student/services/database.dart';
-import 'package:brindavan_student/view/main/reusable_widget/read_more_notification.dart';
+import 'package:brindavan_student/view/main/pages/static/read_more_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -30,11 +30,12 @@ class _NotificationWidgetState extends State<NotificationWidget> {
       },
       child: Container(
         decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(11),
-            border: Border.all(
-              color: Colors.grey.shade700,
-            )),
+          color: Theme.of(context).canvasColor,
+          borderRadius: BorderRadius.circular(16),
+          // border: Border.all(
+          //   color: Colors.grey.shade700,
+          // )
+        ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,12 +68,49 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                         )
                       ]).pOnly(left: 12),
                   const Spacer(),
-                  IconButton(
-                    icon: const Icon(Icons.grade_outlined),
-                    tooltip: 'star notification',
-                    onPressed: () {
-                      DatabaseService().starNotification(data.id);
-                    },
+                  Material(
+                    child: Ink(
+                      decoration: ShapeDecoration(
+                        color: Theme.of(context).colorScheme.background,
+                        shape: const CircleBorder(),
+                      ),
+                      child: IconButton(
+                        // splashRadius: 30,
+
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        splashRadius: 23,
+                        // splashColor: Theme.of(context).colorScheme.background,
+                        icon: const Icon(Icons.grade_outlined),
+                        tooltip: 'star notification',
+                        onPressed: () {
+                          DatabaseService().starNotification(
+                              data.id, data.fullName, data.title);
+                          SnackBar snackBar = SnackBar(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.onBackground,
+                            dismissDirection: DismissDirection.down,
+                            duration: const Duration(seconds: 3),
+                            behavior: SnackBarBehavior.floating,
+                            content: "Notification Starred"
+                                .text
+                                .color(Theme.of(context).colorScheme.background)
+                                .make(),
+                            action: SnackBarAction(
+                              label: 'Undo',
+                              textColor: Theme.of(context).colorScheme.primary,
+                              onPressed: () {
+                                DatabaseService().removeFromStared(
+                                    data.id, data.fullName, data.title);
+                              },
+                            ),
+                          );
+
+                          // Find the ScaffoldMessenger in the widget tree
+                          // and use it to show a SnackBar.
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ),

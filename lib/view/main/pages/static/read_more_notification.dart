@@ -3,7 +3,7 @@ import 'package:velocity_x/velocity_x.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../models/notificationdata.dart';
+import '../../../../models/notificationdata.dart';
 
 class ReadMoreNotification extends StatefulWidget {
   final NotificationData? notification;
@@ -26,23 +26,33 @@ class _ReadMoreNotificationState extends State<ReadMoreNotification> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            data!.fullName.text.make(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                data!.fullName.text.make(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (data.department != "ALL")
+                      (data.department)
+                          .text
+                          .lineHeight(0)
+                          .sm
+                          .make()
+                          .pOnly(right: 5),
+                    (data.position == "Admin" ? "Principle" : data.position)
+                        .text
+                        .sm
+                        .uppercase
+                        .make()
+                  ],
+                ),
+              ],
+            ),
             const Spacer(),
-            (data.department == "ALL" ? "" : data.department)
-                .text
-                .sm
-                .make()
-                .pLTRB(0, 0, 5, 0),
-            "${(data.position == "Admin" ? "Principle" : data.position)},"
-                .text
-                .uppercase
-                .sm
-                .make()
-                .pLTRB(0, 0, 5, 0),
             (formatDate(
                     DateTime.parse(data.createdAt), [MM, ' ', d, ', ', yyyy]))
                 .text
-                .sm
                 .make()
           ],
         ),

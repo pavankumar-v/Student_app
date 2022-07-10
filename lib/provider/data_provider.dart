@@ -17,9 +17,12 @@ class DataProvider with ChangeNotifier {
       DatabaseService(branch: branch, sem: sem).getSubjects();
 
   Stream<List<NotificationData?>?> get notificationByBranch =>
-      DatabaseService().getNotifications(branch);
+      DatabaseService().getNotifications([branch!.toLowerCase()]);
   Stream<List<NotificationData?>?> get notificationBySection =>
-      DatabaseService().getNotifications((branch! + sem! + section!));
+      DatabaseService().getNotifications([
+        (branch! + sem! + section!).toLowerCase(),
+        (branch! + sem!).toLowerCase()
+      ]);
   Stream<List<NotificationData?>?> get notificationAll =>
-      DatabaseService().getNotifications("all");
+      DatabaseService().getNotifications(["all"]);
 }

@@ -9,6 +9,7 @@ import 'package:brindavan_student/view/main/pages/notification.dart';
 import 'package:brindavan_student/view/main/pages/placementView.dart';
 import 'package:brindavan_student/view/main/pages/profile_page.dart';
 import 'package:brindavan_student/view/main/pages/select_avatar.dart';
+import 'package:brindavan_student/view/main/pages/starredNotification.dart';
 import 'package:brindavan_student/view/main/pages/subject_list.dart';
 import 'package:brindavan_student/view/main/pages/theme.dart';
 import 'package:brindavan_student/services/auth.dart';
@@ -281,9 +282,7 @@ class _NavigateState extends State<Navigate>
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          Attendance(
-                                                            userData: userData,
-                                                          )));
+                                                          const StarredNotification()));
                                             });
                                           },
                                           child: ListTile(
@@ -291,9 +290,7 @@ class _NavigateState extends State<Navigate>
                                               Icons.grade_rounded,
                                               color: MyColor.textColor,
                                             ),
-                                            title: 'Starred Notification'
-                                                .text
-                                                .make(),
+                                            title: 'Starred'.text.make(),
                                           ),
                                         ).p12(),
                                         ElevatedButton(

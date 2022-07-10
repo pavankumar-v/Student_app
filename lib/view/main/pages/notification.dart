@@ -46,7 +46,7 @@ class _NotificationListState extends State<NotificationList> {
         : DefaultTabController(
             length: 3,
             child: Scaffold(
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme.of(context).colorScheme.background,
               appBar: AppBar(
                 elevation: 0,
                 title: 'Notification'.text.xl3.bold.center.make(),
@@ -75,7 +75,15 @@ class _NotificationListState extends State<NotificationList> {
                   child: StreamBuilder<List<NotificationData?>?>(
                       stream: notificationDataBySection,
                       builder: (context, snapshot) {
-                        if (snapshot.hasData) {
+                        // print(snapshot.data!.length);
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.connectionState ==
+                                ConnectionState.active &&
+                            snapshot.hasData) {
                           return ListView.builder(
                               addAutomaticKeepAlives: true,
                               itemCount: snapshot.data!.length,
@@ -84,6 +92,10 @@ class _NotificationListState extends State<NotificationList> {
                                 return NotificationWidget(notification: data)
                                     .px(20); // passing into widget constructor
                               });
+                        } else if (snapshot.data!.isEmpty) {
+                          return Center(
+                            child: "No Posts".text.bold.xl5.make(),
+                          );
                         } else {
                           return Center(
                             child: "Noting Found"
@@ -100,7 +112,12 @@ class _NotificationListState extends State<NotificationList> {
                   child: StreamBuilder<List<NotificationData?>?>(
                       stream: notificationDataByBranch,
                       builder: (context, snapshot) {
-                        if (snapshot.hasData) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasData) {
                           return ListView.builder(
                               addAutomaticKeepAlives: true,
                               itemCount: snapshot.data!.length,
@@ -109,6 +126,10 @@ class _NotificationListState extends State<NotificationList> {
                                 return NotificationWidget(notification: data)
                                     .px(20); // passing into widget constructor
                               });
+                        } else if (snapshot.data!.isEmpty) {
+                          return Center(
+                            child: "No Posts".text.bold.xl5.make(),
+                          );
                         } else {
                           return Center(
                             child: "Noting Found"
@@ -125,7 +146,13 @@ class _NotificationListState extends State<NotificationList> {
                   child: StreamBuilder<List<NotificationData?>?>(
                       stream: notificationDataAll,
                       builder: (context, snapshot) {
-                        if (snapshot.hasData) {
+                        // print(snapshot.data![0]!.fullName);
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasData) {
                           return ListView.builder(
                               addAutomaticKeepAlives: true,
                               itemCount: snapshot.data!.length,
@@ -134,6 +161,10 @@ class _NotificationListState extends State<NotificationList> {
                                 return NotificationWidget(notification: data)
                                     .px(20); // passing into widget constructor
                               });
+                        } else if (snapshot.data!.isEmpty) {
+                          return Center(
+                            child: "No Posts".text.bold.xl5.make(),
+                          );
                         } else {
                           return Center(
                             child: "Noting Found"

@@ -21,6 +21,7 @@ class UserData {
   final String section;
   final bool isActive;
   final String avatar;
+  final List<StarredPostData>? starredNotifications;
 
   UserData({
     required this.usn,
@@ -30,18 +31,26 @@ class UserData {
     required this.section,
     required this.isActive,
     required this.avatar,
+    this.starredNotifications,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      usn: json['usn'],
-      fullName: json['fullName'],
-      sem: json['sem'],
-      branch: json['branch'],
-      section: json['section'],
-      isActive: json['isActive'],
-      avatar: json['avatar'],
-    );
+        usn: json['usn'],
+        fullName: json['fullName'],
+        sem: json['sem'],
+        branch: json['branch'],
+        section: json['section'],
+        isActive: json['isActive'],
+        avatar: json['avatar'],
+        starredNotifications: parsedNotifications(json));
+  }
+
+  static List<StarredPostData> parsedNotifications(parsedJson) {
+    var list = parsedJson['StarredNotification'] as List;
+    List<StarredPostData> postsList =
+        list.map((data) => StarredPostData.fromJson(data)).toList();
+    return postsList;
   }
 
   Map<String, dynamic> toMap() {
@@ -53,5 +62,23 @@ class UserData {
       'section': section,
       'avatar': avatar
     };
+  }
+}
+
+class StarredPostData {
+  final String? id;
+  final String? fullName;
+  final String? title;
+  StarredPostData({
+    this.id,
+    this.fullName,
+    this.title,
+  });
+
+  factory StarredPostData.fromJson(Map<String, dynamic> parsedJson) {
+    return StarredPostData(
+        id: parsedJson['id'],
+        fullName: parsedJson['fullName'],
+        title: parsedJson['title']);
   }
 }

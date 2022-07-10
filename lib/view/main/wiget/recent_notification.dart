@@ -34,8 +34,12 @@ class _RecentNotificationState extends State<RecentNotification> {
     return StreamBuilder<List<NotificationData?>?>(
         stream: notificationData,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data!.length > 2) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasData) {
+            if (snapshot.data!.isNotEmpty) {
               return ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   // scrollDirection: Axis.vertical,
@@ -46,7 +50,12 @@ class _RecentNotificationState extends State<RecentNotification> {
                     return NotificationWidget(
                         notification: data); // passing into widget constructor
                   });
-            } else {
+            } else if (snapshot.data!.isEmpty) {
+              return Center(
+                child: "No Posts".text.bold.xl5.make(),
+              );
+            }
+            {
               return Center(
                 child: "No Recent Posts".text.make(),
               );
