@@ -3,7 +3,6 @@ import 'package:brindavan_student/provider/data_provider.dart';
 import 'package:brindavan_student/view/authentication/authenticate.dart';
 import 'package:brindavan_student/view/authentication/verify.dart';
 import 'package:brindavan_student/view/main/navigator.dart';
-import 'package:brindavan_student/view/main/pages/warningView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,20 +23,27 @@ class Wrapper extends StatelessWidget {
     if (user == null) {
       return const Authenticate();
     } else if (curUser!.emailVerified) {
-      return StreamBuilder<UserData?>(
-          stream: DataProvider().userData,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ChangeNotifierProvider(
-                  create: (context) => DataProvider(
-                      branch: snapshot.data!.branch,
-                      sem: snapshot.data!.sem.toString(),
-                      section: snapshot.data!.section),
-                  child: const Navigate());
-            } else {
-              return const UserInactive();
-            }
-          });
+      return Scaffold(
+        body: StreamBuilder<UserData?>(
+            stream: DataProvider().userData,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.active &&
+                  snapshot.hasData) {
+                return ChangeNotifierProvider(
+                    create: (context) => DataProvider(
+                        branch: snapshot.data!.branch,
+                        sem: snapshot.data!.sem.toString(),
+                        section: snapshot.data!.section),
+                    child: const Navigate());
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                return const Center(
+                  child: Text("Something Went Wrong"),
+                );
+              }
+            }),
+      );
     } else {
       return const VerifyScreen();
     }
