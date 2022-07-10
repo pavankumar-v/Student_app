@@ -76,9 +76,9 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                   const Spacer(),
                   Material(
                     child: Ink(
-                      decoration: ShapeDecoration(
-                        color: Theme.of(context).colorScheme.background,
-                        shape: const CircleBorder(),
+                      decoration: const ShapeDecoration(
+                        // color: Theme.of(context).colorScheme.background,
+                        shape: CircleBorder(),
                       ),
                       child: IconButton(
                         // splashRadius: 30,
@@ -148,10 +148,25 @@ class _NotificationWidgetState extends State<NotificationWidget> {
               const SizedBox(
                 height: 10,
               ),
+              // RichText(
+              //   text: TextSpan(
+              //     children: <TextSpan>[
+              //       TextSpan(
+              //         text: data.description.length > 100
+              //             ? "${data.description.substring(0, 99)}  •••"
+              //             : data.description, // emoji characters
+              //         style: TextStyle(
+              //           color: Theme.of(context).colorScheme.onBackground,
+              //           fontFamily: 'EmojiOne',
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               data.description.length > 100
-                  ? (data.description
-                      .substring(0, 99)
+                  ? ("${data.description.substring(0, 99)}  •••"
                       .text
+                      .base
                       .lineHeight(1.5)
                       .make())
                   : data.description.text.lineHeight(1.5).make(),
