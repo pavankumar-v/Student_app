@@ -9,7 +9,9 @@ import '../../../theme/theme_provider.dart';
 
 class NotificationWidget extends StatefulWidget {
   final NotificationData? notification;
-  const NotificationWidget({Key? key, required this.notification})
+  bool? isContain;
+  NotificationWidget(
+      {Key? key, required this.notification, required this.isContain})
       : super(key: key);
 
   @override
@@ -21,6 +23,10 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   Widget build(BuildContext context) {
     var MyColor = Theme.of(context).extension<MyColors>()!;
     var data = widget.notification;
+    // print(widget.isContain);
+    // if(widget.isContain == null){
+    //   widget.isContain = false;
+    // }
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
@@ -80,18 +86,29 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
                         splashRadius: 23,
                         // splashColor: Theme.of(context).colorScheme.background,
-                        icon: const Icon(Icons.grade_outlined),
+
+                        icon: widget.isContain!
+                            ? const Icon(Icons.grade)
+                            : const Icon(Icons.grade_outlined),
                         tooltip: 'star notification',
                         onPressed: () {
-                          DatabaseService().starNotification(
-                              data.id, data.fullName, data.title);
+                          if (widget.isContain!) {
+                            DatabaseService().removeFromStared(
+                                data.id, data.fullName, data.title);
+                          } else {
+                            DatabaseService().starNotification(
+                                data.id, data.fullName, data.title);
+                          }
+
                           SnackBar snackBar = SnackBar(
                             backgroundColor:
                                 Theme.of(context).colorScheme.onBackground,
                             dismissDirection: DismissDirection.down,
-                            duration: const Duration(seconds: 3),
+                            duration: const Duration(seconds: 2),
                             behavior: SnackBarBehavior.floating,
-                            content: "Notification Starred"
+                            content: (widget.isContain!
+                                    ? "Removed"
+                                    : "Notification Starred")
                                 .text
                                 .color(Theme.of(context).colorScheme.background)
                                 .make(),
@@ -99,8 +116,13 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                               label: 'Undo',
                               textColor: Theme.of(context).colorScheme.primary,
                               onPressed: () {
-                                DatabaseService().removeFromStared(
-                                    data.id, data.fullName, data.title);
+                                if (widget.isContain!) {
+                                  DatabaseService().removeFromStared(
+                                      data.id, data.fullName, data.title);
+                                } else {
+                                  DatabaseService().starNotification(
+                                      data.id, data.fullName, data.title);
+                                }
                               },
                             ),
                           );
@@ -134,48 +156,16 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                       .make())
                   : data.description.text.lineHeight(1.5).make(),
 
-              // SelectableLinkify(
-              //   // text: data.description,
-              //   text: data.description.length > 250
-              //       ? "${data.description.substring(0, 249)} ........"
-              //       // ? "${data.description.substring(0, ((data.description.length / 100) * 85).floor())} ........"
-              //       : data.description,
-              //   onOpen: (link) async {
-              //     final Uri url = Uri.parse(link.url);
-
-              //     Future<void> _launchInBrowser(Uri url) async {
-              //       if (!await launchUrl(
-              //         url,
-              //         mode: LaunchMode.externalApplication,
-              //       )) {
-              //         throw 'Could not launch $url';
-              //       }
-              //     }
-
-              //     await _launchInBrowser(url);
-              //   },
-              //   options: const LinkifyOptions(humanize: false),
-              //   style: const TextStyle(height: 1.5, fontSize: 14),
-              // ),
-
               Row(
                 children: [
                   for (var i in data.tags)
                     "#$i".text.color(Colors.blue).make().pLTRB(0, 0, 5, 0),
                 ],
               ).py(5),
-
-              // data.description.text.lineHeight(1.5).sm.make(),
             ],
           ).p(23),
         ]),
       ).py12(),
     );
   }
-
-  // _chipBuilder(tags){
-  //   return Row(
-
-  //   )
-  // }
 }

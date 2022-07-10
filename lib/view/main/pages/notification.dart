@@ -7,6 +7,8 @@ import 'package:brindavan_student/utils/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../../models/user.dart';
+
 class NotificationList extends StatefulWidget {
   const NotificationList({Key? key}) : super(key: key);
 
@@ -20,12 +22,15 @@ class _NotificationListState extends State<NotificationList> {
   Stream<List<NotificationData?>?>? notificationDataBySection;
   Stream<List<NotificationData?>?>? notificationDataByBranch;
 
+  var userData;
+
   @override
   void initState() {
     final dataProvider = Provider.of<DataProvider>(context, listen: false);
     notificationDataAll = dataProvider.notificationAll;
     notificationDataBySection = dataProvider.notificationBySection;
     notificationDataByBranch = dataProvider.notificationByBranch;
+    userData = dataProvider.userData;
     // _notificationData = _dataProvider.notifications;
 
     super.initState();
@@ -70,114 +75,164 @@ class _NotificationListState extends State<NotificationList> {
                                   color: MyColor.textColor))),
                     ]),
               ),
-              body: TabBarView(children: [
-                Center(
-                  child: StreamBuilder<List<NotificationData?>?>(
-                      stream: notificationDataBySection,
-                      builder: (context, snapshot) {
-                        // print(snapshot.data!.length);
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.connectionState ==
-                                ConnectionState.active &&
-                            snapshot.hasData) {
-                          return ListView.builder(
-                              addAutomaticKeepAlives: true,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                var data = snapshot.data![index];
-                                return NotificationWidget(notification: data)
-                                    .px(20); // passing into widget constructor
-                              });
-                        } else if (snapshot.data!.isEmpty) {
-                          return Center(
-                            child: "No Posts".text.bold.xl5.make(),
-                          );
-                        } else {
-                          return Center(
-                            child: "Noting Found"
-                                .text
-                                .lg
-                                .bold
-                                .color(Theme.of(context).hintColor)
-                                .make(),
-                          );
-                        }
-                      }),
-                ),
-                Center(
-                  child: StreamBuilder<List<NotificationData?>?>(
-                      stream: notificationDataByBranch,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.hasData) {
-                          return ListView.builder(
-                              addAutomaticKeepAlives: true,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                var data = snapshot.data![index];
-                                return NotificationWidget(notification: data)
-                                    .px(20); // passing into widget constructor
-                              });
-                        } else if (snapshot.data!.isEmpty) {
-                          return Center(
-                            child: "No Posts".text.bold.xl5.make(),
-                          );
-                        } else {
-                          return Center(
-                            child: "Noting Found"
-                                .text
-                                .lg
-                                .bold
-                                .color(Theme.of(context).hintColor)
-                                .make(),
-                          );
-                        }
-                      }),
-                ),
-                Center(
-                  child: StreamBuilder<List<NotificationData?>?>(
-                      stream: notificationDataAll,
-                      builder: (context, snapshot) {
-                        // print(snapshot.data![0]!.fullName);
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.hasData) {
-                          return ListView.builder(
-                              addAutomaticKeepAlives: true,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                var data = snapshot.data![index];
-                                return NotificationWidget(notification: data)
-                                    .px(20); // passing into widget constructor
-                              });
-                        } else if (snapshot.data!.isEmpty) {
-                          return Center(
-                            child: "No Posts".text.bold.xl5.make(),
-                          );
-                        } else {
-                          return Center(
-                            child: "Noting Found"
-                                .text
-                                .lg
-                                .bold
-                                .color(Theme.of(context).hintColor)
-                                .make(),
-                          );
-                        }
-                      }),
-                ),
-              ]),
+              body: StreamBuilder<UserData?>(
+                  stream: userData,
+                  builder: (context, snapshot) {
+                    UserData? user = snapshot.data!;
+                    List<StarredPostData>? listCheck =
+                        (user.starredNotifications!);
+
+                    // var contain =
+                    //     listCheck!.where((element) => element.id == "id");
+                    // print(listCheck[0].fullName);
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return TabBarView(children: [
+                      Center(
+                        child: StreamBuilder<List<NotificationData?>?>(
+                            stream: notificationDataBySection,
+                            builder: (context, snapshot) {
+                              // print(snapshot.data!.length);
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (snapshot.connectionState ==
+                                      ConnectionState.active &&
+                                  snapshot.hasData) {
+                                return ListView.builder(
+                                    addAutomaticKeepAlives: true,
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      var data = snapshot.data![index];
+
+                                      bool contain = false;
+                                      for (var element in listCheck) {
+                                        if (element.id ==
+                                            snapshot.data![index]!.id) {
+                                          contain = true;
+                                          break;
+                                        }
+                                      }
+                                      return NotificationWidget(
+                                        notification: data,
+                                        isContain: contain,
+                                      ).px(
+                                          20); // passing into widget constructor
+                                    });
+                              } else if (snapshot.data!.isEmpty) {
+                                return Center(
+                                  child: "No Posts".text.bold.xl5.make(),
+                                );
+                              } else {
+                                return Center(
+                                  child: "Noting Found"
+                                      .text
+                                      .lg
+                                      .bold
+                                      .color(Theme.of(context).hintColor)
+                                      .make(),
+                                );
+                              }
+                            }),
+                      ),
+                      Center(
+                        child: StreamBuilder<List<NotificationData?>?>(
+                            stream: notificationDataByBranch,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (snapshot.hasData) {
+                                return ListView.builder(
+                                    addAutomaticKeepAlives: true,
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      var data = snapshot.data![index];
+                                      bool contain = false;
+                                      for (var element in listCheck) {
+                                        if (element.id ==
+                                            snapshot.data![index]!.id) {
+                                          contain = true;
+                                          break;
+                                        }
+                                      }
+                                      return NotificationWidget(
+                                        notification: data,
+                                        isContain: contain,
+                                      ).px(
+                                          20); // passing into widget constructor
+                                    });
+                              } else if (snapshot.data!.isEmpty) {
+                                return Center(
+                                  child: "No Posts".text.bold.xl5.make(),
+                                );
+                              } else {
+                                return Center(
+                                  child: "Noting Found"
+                                      .text
+                                      .lg
+                                      .bold
+                                      .color(Theme.of(context).hintColor)
+                                      .make(),
+                                );
+                              }
+                            }),
+                      ),
+                      Center(
+                        child: StreamBuilder<List<NotificationData?>?>(
+                            stream: notificationDataAll,
+                            builder: (context, snapshot) {
+                              // print(snapshot.data![0]!.fullName);
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (snapshot.hasData) {
+                                return ListView.builder(
+                                    addAutomaticKeepAlives: true,
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      var data = snapshot.data![index];
+                                      bool contain = false;
+                                      for (var element in listCheck) {
+                                        if (element.id ==
+                                            snapshot.data![index]!.id) {
+                                          contain = true;
+                                          break;
+                                        }
+                                      }
+                                      return NotificationWidget(
+                                        notification: data,
+                                        isContain: contain,
+                                      ).px(
+                                          20); // passing into widget constructor
+                                    });
+                              } else if (snapshot.data!.isEmpty) {
+                                return Center(
+                                  child: "No Posts".text.bold.xl5.make(),
+                                );
+                              } else {
+                                return Center(
+                                  child: "Noting Found"
+                                      .text
+                                      .lg
+                                      .bold
+                                      .color(Theme.of(context).hintColor)
+                                      .make(),
+                                );
+                              }
+                            }),
+                      ),
+                    ]);
+                  }),
             ),
           );
   }
