@@ -23,7 +23,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   Widget build(BuildContext context) {
     var MyColor = Theme.of(context).extension<MyColors>()!;
     var data = widget.notification;
-    // print(widget.isContain);
     // if(widget.isContain == null){
     //   widget.isContain = false;
     // }
@@ -88,16 +87,20 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                         // splashColor: Theme.of(context).colorScheme.background,
 
                         icon: widget.isContain!
-                            ? const Icon(Icons.grade)
-                            : const Icon(Icons.grade_outlined),
+                            ? const Icon(Icons.bookmark)
+                            : const Icon(Icons.bookmark_outline),
                         tooltip: 'star notification',
                         onPressed: () {
+                          print(widget.isContain);
+
                           if (widget.isContain!) {
-                            DatabaseService().removeFromStared(
-                                data.id, data.fullName, data.title);
+                            print("removing...");
+                            DatabaseService().removeFromStared(data.id,
+                                data.fullName, data.title, data.department);
                           } else {
-                            DatabaseService().starNotification(
-                                data.id, data.fullName, data.title);
+                            print("staring...");
+                            DatabaseService().starNotification(data.id,
+                                data.fullName, data.title, data.department);
                           }
 
                           SnackBar snackBar = SnackBar(
@@ -108,7 +111,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                             behavior: SnackBarBehavior.floating,
                             content: (widget.isContain!
                                     ? "Removed"
-                                    : "Notification Starred")
+                                    : "Notification Saved")
                                 .text
                                 .color(Theme.of(context).colorScheme.background)
                                 .make(),
@@ -118,10 +121,16 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                               onPressed: () {
                                 if (widget.isContain!) {
                                   DatabaseService().removeFromStared(
-                                      data.id, data.fullName, data.title);
+                                      data.id,
+                                      data.fullName,
+                                      data.title,
+                                      data.department);
                                 } else {
                                   DatabaseService().starNotification(
-                                      data.id, data.fullName, data.title);
+                                      data.id,
+                                      data.fullName,
+                                      data.title,
+                                      data.department);
                                 }
                               },
                             ),
@@ -173,8 +182,14 @@ class _NotificationWidgetState extends State<NotificationWidget> {
 
               Row(
                 children: [
-                  for (var i in data.tags)
-                    "#$i".text.color(Colors.blue).make().pLTRB(0, 0, 5, 0),
+                  for (var i = 0;
+                      i < (data.tags.length > 3 ? 3 : data.tags.length);
+                      i++)
+                    "#${data.tags[i]}"
+                        .text
+                        .color(Colors.blue)
+                        .make()
+                        .pLTRB(0, 0, 5, 0),
                 ],
               ).py(5),
             ],

@@ -88,10 +88,10 @@ class DatabaseService {
   }
 
   //stream DataNotifcation
-  Stream<List<NotificationData?>?> getNotifications(filterArr) {
+  Stream<List<NotificationData?>?> getNotifications(filterArr, collectionName) {
     print(filterArr);
     return _db
-        .collection('notifications')
+        .collection(collectionName)
         .limit(100)
         .orderBy('createdAt', descending: true)
         .where("tags", arrayContainsAny: filterArr)
@@ -102,44 +102,73 @@ class DatabaseService {
   }
 
   // Add to stared notifications
-  void starNotification(notificationId, fullName, title) {
-    print(notificationId);
+  void starNotification(notificationId, fullName, title, department) {
     try {
-      _db.collection("users").doc(_auth.currentUser!.uid).set({
-        "StarredNotification": FieldValue.arrayUnion([
-          {"id": notificationId, "fullName": fullName, "title": title}
-        ])
-      }, SetOptions(merge: true)).then((value) => print("starred"));
+      print(notificationId);
+      print(fullName);
+      print(title);
+      print(department);
+      _db
+          .collection("users")
+          .doc(_auth.currentUser!.uid)
+          .set({
+            "StarredNotification": FieldValue.arrayUnion([
+              {
+                "id": notificationId,
+                "fullName": fullName,
+                "title": title,
+                "department": department
+              }
+            ])
+          }, SetOptions(merge: true))
+          .then((value) => print("starred"))
+          .catchError((e) => print(e));
     } catch (e) {
       print(e);
     }
   }
 
   //
-  void removeFromStared(notificationId, fullName, title) {
+  void removeFromStared(notificationId, fullName, title, department) {
     try {
-      _db.collection("users").doc(_auth.currentUser!.uid).set({
-        "StarredNotification": FieldValue.arrayRemove([
-          {"id": notificationId, "fullName": fullName, "title": title}
-        ])
-      }, SetOptions(merge: true)).then((value) => print("removed"));
+      print(notificationId);
+      print(fullName);
+      print(title);
+      print(department);
+      _db
+          .collection("users")
+          .doc(_auth.currentUser!.uid)
+          .set({
+            "StarredNotification": FieldValue.arrayRemove([
+              {
+                "id": notificationId,
+                "fullName": fullName,
+                "title": title,
+                "department": department
+              }
+            ])
+          }, SetOptions(merge: true))
+          .then((value) => print("removed"))
+          .catchError((e) => print(e));
     } catch (e) {
       print(e);
     }
   }
 
   //stared notification
-  Future<dynamic>? getStarredNotifications(docId) async {
+  Future<dynamic>? getStarredNotifications(docId, department) async {
     try {
       var result = await _db
-          .collection('notifications')
+          .collection(department == 'ALL'
+              ? 'notifications'
+              : "branch/${department.toString().toLowerCase()}/notifications")
           .doc(docId)
           .get()
           .then((doc) => doc.data());
       // print(result);
       return result;
     } catch (e) {
-      print(e.toString());
+      print(e);
       return null;
     }
   }

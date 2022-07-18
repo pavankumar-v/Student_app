@@ -1,9 +1,7 @@
 import 'package:brindavan_student/models/user.dart';
-import 'package:brindavan_student/view/main/pages/select_avatar.dart';
 import 'package:brindavan_student/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/services.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -20,9 +18,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
-       
         title: 'Profile'.text.white.center.make(),
       ),
       extendBodyBehindAppBar: true,
@@ -60,7 +58,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         initialValue: widget.userData!.branch,
                         textCapitalization: TextCapitalization.sentences,
                         decoration: textInputDecoration.copyWith(
-                            labelText: 'Branch', counter: const SizedBox.shrink()),
+                            labelText: 'Branch',
+                            counter: const SizedBox.shrink()),
                       ).py(10),
                       TextFormField(
                         enabled: false,
@@ -74,7 +73,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         initialValue: widget.userData!.section,
                         textCapitalization: TextCapitalization.sentences,
                         decoration: textInputDecoration.copyWith(
-                            labelText: 'Section', counter: const SizedBox.shrink()),
+                            labelText: 'Section',
+                            counter: const SizedBox.shrink()),
                       ).py(10),
                     ],
                   ).px24(),

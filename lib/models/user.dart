@@ -69,16 +69,20 @@ class StarredPostData {
   final String? id;
   final String? fullName;
   final String? title;
+  final String? department;
+
   StarredPostData({
     this.id,
     this.fullName,
     this.title,
+    this.department,
   });
 
   factory StarredPostData.fromJson(Map<String, dynamic> parsedJson) {
     return StarredPostData(
         id: parsedJson['id'],
         fullName: parsedJson['fullName'],
-        title: parsedJson['title']);
+        title: parsedJson['title'],
+        department: parsedJson['department']);
   }
 }

@@ -59,8 +59,20 @@ class _HomeState extends State<Home> {
             stream: data,
             builder: (context, snapshot) {
               UserData? userData = snapshot.data;
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text("Something went wrong"),
+                );
+              }
               if (snapshot.hasData) {
                 return Scaffold(
+                  backgroundColor: Theme.of(context).colorScheme.background,
                   appBar: AppBar(
                     elevation: 0,
                     title: Row(children: [
@@ -87,7 +99,6 @@ class _HomeState extends State<Home> {
                       )
                     ]),
                   ),
-                  backgroundColor: Theme.of(context).backgroundColor,
                   body: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

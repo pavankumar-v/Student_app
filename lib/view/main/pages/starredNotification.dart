@@ -2,7 +2,6 @@
 
 import 'package:brindavan_student/models/notificationdata.dart';
 import 'package:brindavan_student/models/user.dart';
-import 'package:brindavan_student/services/testservice.dart';
 import 'package:brindavan_student/view/main/pages/static/read_more_notification.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
@@ -48,9 +47,7 @@ class _StarredNotificationState extends State<StarredNotification> {
         stream: userData,
         builder: (context, snapshot) {
           UserData? user = snapshot.data;
-          // print(user!.starredNotifications![0].title);
-          // print(user!.starredNotifications![0].fullName);
-
+          // print(user!.starredNotifications!.reversed);
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
@@ -58,6 +55,7 @@ class _StarredNotificationState extends State<StarredNotification> {
           } else if (snapshot.connectionState == ConnectionState.active &&
               snapshot.hasData) {
             // print(user!.starredNotifications!.length);/
+
             if (user!.starredNotifications!.isEmpty) {
               return Center(
                 child: "Empty"
@@ -68,20 +66,26 @@ class _StarredNotificationState extends State<StarredNotification> {
                     .make(),
               );
             } else {
+              for (var i = 0; i < user.starredNotifications!.length / 2; i++) {
+                var temp = user.starredNotifications![i];
+                user.starredNotifications![i] = user.starredNotifications![
+                    user.starredNotifications!.length - 1 - i];
+                user.starredNotifications![
+                    user.starredNotifications!.length - 1 - i] = temp;
+              }
               return ListView.builder(
+
                   // shrinkWrap: true,
-                  // reverse: true,
+
                   physics: const BouncingScrollPhysics(),
                   itemCount: user.starredNotifications!.length,
                   itemBuilder: (context, index) {
-                    // print(index);
-
                     return ListTile(
                       onTap: () async {
                         Future<dynamic>? res = DatabaseService()
                             .getStarredNotifications(
-                                user.starredNotifications![index].id);
-
+                                user.starredNotifications![index].id,
+                                user.starredNotifications![index].department);
                         var result = await res;
                         NotificationData? data = NotificationData(
                             id: "",
@@ -102,9 +106,9 @@ class _StarredNotificationState extends State<StarredNotification> {
                                 )));
                       },
                       trailing: Ink(
-                        decoration: ShapeDecoration(
-                          color: Theme.of(context).colorScheme.background,
-                          shape: const CircleBorder(),
+                        decoration: const ShapeDecoration(
+                          color: Colors.transparent,
+                          shape: CircleBorder(),
                         ),
                         child: IconButton(
                           // splashRadius: 30,
@@ -112,14 +116,15 @@ class _StarredNotificationState extends State<StarredNotification> {
                           color:
                               Theme.of(context).colorScheme.onPrimaryContainer,
                           splashRadius: 23,
-                          // splashColor: Theme.of(context).colorScheme.background,
-                          icon: const Icon(Icons.star),
+                          icon: const Icon(Icons.bookmark),
                           tooltip: 'star notification',
                           onPressed: () {
                             DatabaseService().removeFromStared(
-                                user.starredNotifications![index].id,
-                                user.starredNotifications![index].fullName,
-                                user.starredNotifications![index].title);
+                              user.starredNotifications![index].id,
+                              user.starredNotifications![index].fullName,
+                              user.starredNotifications![index].title,
+                              user.starredNotifications![index].department,
+                            );
                             SnackBar snackBar = SnackBar(
                               backgroundColor:
                                   Theme.of(context).colorScheme.onBackground,
@@ -140,7 +145,9 @@ class _StarredNotificationState extends State<StarredNotification> {
                                       user.starredNotifications![index].id,
                                       user.starredNotifications![index]
                                           .fullName,
-                                      user.starredNotifications![index].title);
+                                      user.starredNotifications![index].title,
+                                      user.starredNotifications![index]
+                                          .department);
                                 },
                               ),
                             );
@@ -158,11 +165,22 @@ class _StarredNotificationState extends State<StarredNotification> {
                           .lg
                           .bold
                           .make(),
-                      subtitle: user.starredNotifications![index].title!.text
-                          .color(
-                              Theme.of(context).colorScheme.onPrimaryContainer)
-                          .capitalize
-                          .make(),
+                      subtitle: user
+                                  .starredNotifications![index].title!.length >
+                              28
+                          ? "${user.starredNotifications![index].title!.substring(0, 27)} •••"
+                              .text
+                              .color(Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer)
+                              .capitalize
+                              .make()
+                          : user.starredNotifications![index].title!.text
+                              .color(Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer)
+                              .capitalize
+                              .make(),
                     )
                         .card
                         .rounded

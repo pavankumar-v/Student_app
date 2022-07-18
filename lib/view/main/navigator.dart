@@ -116,8 +116,12 @@ class _NavigateState extends State<Navigate>
                         child: BottomNavigationBar(
                           currentIndex: _currentIndex,
                           backgroundColor: Theme.of(context).primaryColor,
-                          selectedItemColor: Colors.white,
-                          unselectedItemColor: Colors.white.withOpacity(.60),
+                          selectedItemColor:
+                              Theme.of(context).colorScheme.onPrimary,
+                          unselectedItemColor: Theme.of(context)
+                              .colorScheme
+                              .onPrimary
+                              .withOpacity(.60),
                           selectedFontSize: 10,
                           selectedLabelStyle:
                               const TextStyle(fontWeight: FontWeight.bold),
@@ -287,10 +291,10 @@ class _NavigateState extends State<Navigate>
                                           },
                                           child: ListTile(
                                             leading: Icon(
-                                              Icons.grade_rounded,
+                                              Icons.bookmark,
                                               color: MyColor.textColor,
                                             ),
-                                            title: 'Starred'.text.make(),
+                                            title: 'Saved'.text.make(),
                                           ),
                                         ).p12(),
                                         ElevatedButton(
@@ -346,7 +350,9 @@ class _NavigateState extends State<Navigate>
                                             elevation: 10,
                                             primary:
                                                 Theme.of(context).primaryColor,
-                                            onPrimary: Colors.grey,
+                                            onPrimary: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(8),
@@ -356,10 +362,14 @@ class _NavigateState extends State<Navigate>
                                           child: ListTile(
                                             leading: const Icon(Icons
                                                     .settings_accessibility_rounded)
-                                                .iconColor(Colors.white),
+                                                .iconColor(Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary),
                                             title: 'About'
                                                 .text
-                                                .color(Colors.white)
+                                                .color(Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary)
                                                 .make(),
                                           ),
                                         ).p12(),

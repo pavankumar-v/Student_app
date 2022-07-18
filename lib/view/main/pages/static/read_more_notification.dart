@@ -29,7 +29,7 @@ class _ReadMoreNotificationState extends State<ReadMoreNotification> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                data!.fullName.text.make(),
+                data!.fullName.text.base.make(),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -53,6 +53,7 @@ class _ReadMoreNotificationState extends State<ReadMoreNotification> {
             (formatDate(
                     DateTime.parse(data.createdAt), [MM, ' ', d, ', ', yyyy]))
                 .text
+                .base
                 .make()
           ],
         ),

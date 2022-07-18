@@ -7,32 +7,32 @@ class TestService {
   var firebaseUser = FirebaseAuth.instance.currentUser!;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // void setFiled(docId) async {
-  //   try {
-  //     return await _db
-  //         .collection('users')
-  //         .doc(docId)
-  //         .set({"StarredNotification": []}, SetOptions(merge: true)).then(
-  //       (_) => print('success'),
-  //     );
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  // }
+  void setFiled(docId) async {
+    try {
+      return await _db
+          .collection('users')
+          .doc(docId)
+          .set({"StarredNotification": []}, SetOptions(merge: true)).then(
+        (_) => print('success'),
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
-  // void fooUsers() async {
-  //   var res = _db
-  //       .collection("users")
-  //       .snapshots()
-  //       .map((snapshots) => snapshots.docs.map((doc) => doc.id))
-  //       .takeWhile((element) => true);
+  void fooUsers() async {
+    var res = _db
+        .collection("users")
+        .snapshots()
+        .map((snapshots) => snapshots.docs.map((doc) => doc.id))
+        .takeWhile((element) => true);
 
-  //   print(res.forEach((element) {
-  //     for (var docId in element) {
-  //       setFiled(docId);
-  //     }
-  //   }));
-  // }
+    print(res.forEach((element) {
+      for (var docId in element) {
+        setFiled(docId);
+      }
+    }));
+  }
 
   //test db
   void addData() {

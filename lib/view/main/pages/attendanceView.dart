@@ -36,6 +36,8 @@ class _AttendanceState extends State<Attendance> {
     var MyColor = Theme.of(context).extension<MyColors>()!;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+
       // key: Provider.of<DateKeyProvider>(context).key,
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -56,11 +58,17 @@ class _AttendanceState extends State<Attendance> {
                           builder: (context, child) => Theme(
                               data: ThemeData().copyWith(
                                 colorScheme: ColorScheme.light(
-                                  primary: Theme.of(context).primaryColor,
+                                  primary:
+                                      Theme.of(context).colorScheme.primary,
                                   // onPrimary: Colors.white
                                 ),
-                                dialogBackgroundColor:
-                                    Theme.of(context).backgroundColor,
+                                dialogBackgroundColor: Colors.white,
+                                textTheme: TextTheme(
+                                  titleSmall: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground),
+                                ),
                               ),
                               child: child!),
                           initialDate: _dateTime,

@@ -49,7 +49,7 @@ class Styles {
           ),
         ],
         fontFamily: GoogleFonts.montserrat().fontFamily,
-        primaryColor: isDarkTheme ? primaryColor : primaryColor,
+        primaryColor: velx.Vx.hexToColor("#0056D2"),
         backgroundColor: isDarkTheme
             ? velx.Vx.hexToColor('#1c202a')
             : velx.Vx.hexToColor('#FFFFFF'),
@@ -75,8 +75,8 @@ class Styles {
         //     .copyWith(secondary: isDarkTheme ? Colors.black : Colors.white),
         colorScheme: ColorScheme(
             brightness: Brightness.light,
-            primary: primaryColor,
-            onPrimary: velx.Vx.hexToColor("#ffffff"),
+            primary: velx.Vx.hexToColor("#0056D2"),
+            onPrimary: velx.Vx.hexToColor("#FFFFFF"),
             primaryContainer: isDarkTheme
                 ? velx.Vx.hexToColor("#0040A1")
                 : velx.Vx.hexToColor("#DAE2FF"),
