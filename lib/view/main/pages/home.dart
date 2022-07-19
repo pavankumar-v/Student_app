@@ -7,6 +7,7 @@ import 'package:brindavan_student/view/main/wiget/recent_notification.dart';
 
 import 'package:brindavan_student/utils/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -103,26 +104,36 @@ class _HomeState extends State<Home> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.2,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(11),
-                              image: DecorationImage(
-                                image: const CachedNetworkImageProvider(
-                                    'https://firebasestorage.googleapis.com/v0/b/brindavan-student-app.appspot.com/o/assets%2Fdrawer_bg%2Fteacher.jpg?alt=media&token=6e8780c9-0269-4203-b176-41047ef6bbdc'),
-                                fit: BoxFit.cover,
-                                colorFilter: ColorFilter.mode(
-                                    Colors.black.withOpacity(0.3),
-                                    BlendMode.darken),
-                              )),
-                          child: _timeString!.text.bold
-                              .letterSpacing(3)
-                              .white
-                              .xl5
-                              .make()
-                              .p(25),
-                        ).py(20),
+                        VxScrollHorizontal(
+                          physics: const BouncingScrollPhysics(),
+                          child: <Widget>[
+                            'First Text'.text.make().p24(),
+                            'Second Text'.text.make().p24(),
+                            'Second Text'.text.make().p24(),
+                            'Second Text'.text.make().p24(),
+                            'Second Text'.text.make().p24(),
+                          ].hStack(),
+                        ),
+                        // Container(
+                        //   width: MediaQuery.of(context).size.width,
+                        //   height: MediaQuery.of(context).size.height * 0.2,
+                        //   decoration: BoxDecoration(
+                        //       borderRadius: BorderRadius.circular(11),
+                        //       image: DecorationImage(
+                        //         image: const CachedNetworkImageProvider(
+                        //             'https://firebasestorage.googleapis.com/v0/b/brindavan-student-app.appspot.com/o/assets%2Fdrawer_bg%2Fteacher.jpg?alt=media&token=6e8780c9-0269-4203-b176-41047ef6bbdc'),
+                        //         fit: BoxFit.cover,
+                        //         colorFilter: ColorFilter.mode(
+                        //             Colors.black.withOpacity(0.3),
+                        //             BlendMode.darken),
+                        //       )),
+                        //   child: _timeString!.text.bold
+                        //       .letterSpacing(3)
+                        //       .white
+                        //       .xl5
+                        //       .make()
+                        //       .p(25),
+                        // ).py(20),
                         'Recent '.text.size(30).bold.make().py12(),
                         const RecentNotification(),
                       ],

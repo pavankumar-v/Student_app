@@ -2,13 +2,13 @@ import 'dart:math';
 import 'package:brindavan_student/models/user.dart';
 import 'package:brindavan_student/provider/data_provider.dart';
 import 'package:brindavan_student/view/main/pages/attendanceView.dart';
+import 'package:brindavan_student/view/main/pages/demo.dart';
 import 'package:brindavan_student/view/main/pages/dynamicForms.dart';
 import 'package:brindavan_student/view/main/pages/enter_details.dart';
 import 'package:brindavan_student/view/main/pages/home.dart';
 import 'package:brindavan_student/view/main/pages/notification.dart';
 import 'package:brindavan_student/view/main/pages/placementView.dart';
 import 'package:brindavan_student/view/main/pages/profile_page.dart';
-import 'package:brindavan_student/view/main/pages/select_avatar.dart';
 import 'package:brindavan_student/view/main/pages/starredNotification.dart';
 import 'package:brindavan_student/view/main/pages/subject_list.dart';
 import 'package:brindavan_student/view/main/pages/theme.dart';
@@ -194,7 +194,7 @@ class _NavigateState extends State<Navigate>
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      const AvatarSelector()));
+                                                      const AvatarList()));
                                         },
                                         child: CircleAvatar(
                                             backgroundImage:
