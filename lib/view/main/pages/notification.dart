@@ -102,6 +102,11 @@ class _NotificationListState extends State<NotificationList> {
                           child: StreamBuilder<List<NotificationData?>?>(
                               stream: notificationDataBySection,
                               builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Center(
+                                    child: Text("Something went wrong"),
+                                  );
+                                }
                                 // print(snapshot.data!.length);
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -129,7 +134,7 @@ class _NotificationListState extends State<NotificationList> {
                                           notification: data,
                                           isContain: contain,
                                         ).px(
-                                            20); // passing into widget constructor
+                                            12); // passing into widget constructor
                                       });
                                 } else if (snapshot.data!.isEmpty) {
                                   return Center(
@@ -174,7 +179,7 @@ class _NotificationListState extends State<NotificationList> {
                                           notification: data,
                                           isContain: contain,
                                         ).px(
-                                            20); // passing into widget constructor
+                                            12); // passing into widget constructor
                                       });
                                 } else if (snapshot.data!.isEmpty) {
                                   return Center(
@@ -220,7 +225,7 @@ class _NotificationListState extends State<NotificationList> {
                                           notification: data,
                                           isContain: contain,
                                         ).px(
-                                            20); // passing into widget constructor
+                                            12); // passing into widget constructor
                                       });
                                 } else if (snapshot.data!.isEmpty) {
                                   return Center(

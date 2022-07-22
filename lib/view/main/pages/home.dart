@@ -3,17 +3,20 @@ import 'dart:async';
 import 'package:brindavan_student/models/subjects.dart';
 import 'package:brindavan_student/models/user.dart';
 import 'package:brindavan_student/provider/data_provider.dart';
+import 'package:brindavan_student/view/main/pages/attendanceView.dart';
+import 'package:brindavan_student/view/main/pages/dynamicForms.dart';
+import 'package:brindavan_student/view/main/pages/starredNotification.dart';
 import 'package:brindavan_student/view/main/wiget/recent_notification.dart';
 
 import 'package:brindavan_student/utils/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../theme/theme_provider.dart';
+import 'demo.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -104,16 +107,6 @@ class _HomeState extends State<Home> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        VxScrollHorizontal(
-                          physics: const BouncingScrollPhysics(),
-                          child: <Widget>[
-                            'First Text'.text.make().p24(),
-                            'Second Text'.text.make().p24(),
-                            'Second Text'.text.make().p24(),
-                            'Second Text'.text.make().p24(),
-                            'Second Text'.text.make().p24(),
-                          ].hStack(),
-                        ),
                         // Container(
                         //   width: MediaQuery.of(context).size.width,
                         //   height: MediaQuery.of(context).size.height * 0.2,
@@ -134,10 +127,147 @@ class _HomeState extends State<Home> {
                         //       .make()
                         //       .p(25),
                         // ).py(20),
-                        'Recent '.text.size(30).bold.make().py12(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            "Quick Access".text.bold.lg.make(),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              // crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                // ICON 1
+                                Column(
+                                  children: [
+                                    // ICON 1
+                                    IconButton(
+                                            color: Colors.white,
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const StarredNotification()));
+                                            },
+                                            icon: const Icon(
+                                                Icons.bookmark_added))
+                                        .card
+                                        .rounded
+                                        .color(Theme.of(context)
+                                            .colorScheme
+                                            .primary)
+                                        .make(),
+                                    "Saved Notifications"
+                                        .text
+                                        .sm
+                                        .center
+                                        .make()
+                                        .py(6)
+                                        .w20(context)
+                                  ],
+                                ),
+                                const Spacer(),
+                                Column(
+                                  children: [
+                                    // ICON 1
+                                    IconButton(
+                                            color: Colors.white,
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const AvatarList()));
+                                            },
+                                            icon: const Icon(
+                                                Icons.account_circle))
+                                        .card
+                                        .rounded
+                                        .color(Theme.of(context)
+                                            .colorScheme
+                                            .primary)
+                                        .make(),
+                                    "Change Avatar"
+                                        .text
+                                        .sm
+                                        .center
+                                        .make()
+                                        .py(6)
+                                        .w20(context)
+                                  ],
+                                ),
+                                const Spacer(),
+                                Column(
+                                  children: [
+                                    // ICON 1
+                                    IconButton(
+                                            color: Colors.white,
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const DynamicForms()));
+                                            },
+                                            icon: const Icon(
+                                                Icons.description_rounded))
+                                        .card
+                                        .rounded
+                                        .color(Theme.of(context)
+                                            .colorScheme
+                                            .primary)
+                                        .make(),
+                                    "Fill Survey Forms"
+                                        .text
+                                        .sm
+                                        .center
+                                        .make()
+                                        .py(6)
+                                        .w20(context)
+                                  ],
+                                ),
+                                const Spacer(),
+                                Column(
+                                  children: [
+                                    // ICON 1
+                                    IconButton(
+                                            color: Colors.white,
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Attendance(
+                                                            userData: userData,
+                                                          )));
+                                            },
+                                            icon: const Icon(
+                                                Icons.event_available_rounded))
+                                        .card
+                                        .rounded
+                                        .color(Theme.of(context)
+                                            .colorScheme
+                                            .primary)
+                                        .make(),
+                                    "Check Attendance"
+                                        .text
+                                        .sm
+                                        .center
+                                        .make()
+                                        .py(6)
+                                        .w20(context)
+                                  ],
+                                )
+                              ],
+                            ).pOnly(top: 22)
+                          ],
+                        )
+                            .p(14)
+                            .card
+                            .rounded
+                            .elevation(1)
+                            .make()
+                            .p(0)
+                            .pOnly(top: 16),
+                        'Recent'.text.xl4.bold.make().py12(),
                         const RecentNotification(),
                       ],
-                    ).px(17),
+                    ).px(12),
                   ),
                 );
               } else {

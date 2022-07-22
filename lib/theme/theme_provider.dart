@@ -95,7 +95,7 @@ class Styles {
                 : velx.Vx.hexToColor("#690005"),
             background: isDarkTheme
                 ? velx.Vx.hexToColor("#1B1B1F")
-                : velx.Vx.hexToColor("#FEFBFF"),
+                : velx.Vx.hexToColor("#F4F4F4"),
             onBackground: isDarkTheme
                 ? velx.Vx.hexToColor("#E4E2E6")
                 : velx.Vx.hexToColor("#1B1B1F"),

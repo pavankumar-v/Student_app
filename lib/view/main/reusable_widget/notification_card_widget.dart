@@ -34,13 +34,13 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 )));
       },
       child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.circular(16),
-          // border: Border.all(
-          //   color: Colors.grey.shade700,
-          // )
-        ),
+        // decoration: BoxDecoration(
+        //   color: Theme.of(context).canvasColor,
+        //   borderRadius: BorderRadius.circular(16),
+        //   // border: Border.all(
+        //   //   color: Colors.grey.shade700,
+        //   // )
+        // ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,76 +73,63 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                         )
                       ]).pOnly(left: 12),
                   const Spacer(),
-                  Material(
-                    child: Ink(
-                      decoration: const ShapeDecoration(
-                        // color: Theme.of(context).colorScheme.background,
-                        shape: CircleBorder(),
-                      ),
-                      child: IconButton(
-                        // splashRadius: 30,
+                  IconButton(
+                    // splashRadius: 30,
 
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        splashRadius: 23,
-                        // splashColor: Theme.of(context).colorScheme.background,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    splashRadius: 23,
+                    // splashColor: Theme.of(context).colorScheme.background,
 
-                        icon: widget.isContain!
-                            ? const Icon(Icons.bookmark)
-                            : const Icon(Icons.bookmark_outline),
-                        tooltip: 'star notification',
-                        onPressed: () {
-                          print(widget.isContain);
+                    icon: widget.isContain!
+                        ? const Icon(Icons.bookmark)
+                        : const Icon(Icons.bookmark_outline),
+                    tooltip: 'star notification',
+                    onPressed: () {
+                      if (widget.isContain!) {
+                        DatabaseService().removeFromStared(data.id,
+                            data.fullName, data.title, data.department);
+                      } else {
+                        DatabaseService().starNotification(data.id,
+                            data.fullName, data.title, data.department);
+                      }
 
-                          if (widget.isContain!) {
-                            print("removing...");
-                            DatabaseService().removeFromStared(data.id,
-                                data.fullName, data.title, data.department);
-                          } else {
-                            print("staring...");
-                            DatabaseService().starNotification(data.id,
-                                data.fullName, data.title, data.department);
-                          }
+                      SnackBar snackBar = SnackBar(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.onBackground,
+                        dismissDirection: DismissDirection.down,
+                        duration: const Duration(seconds: 2),
+                        behavior: SnackBarBehavior.floating,
+                        content: (widget.isContain!
+                                ? "Removed"
+                                : "Notification Saved")
+                            .text
+                            .color(Theme.of(context).colorScheme.background)
+                            .make(),
+                        action: SnackBarAction(
+                          label: 'Undo',
+                          textColor: Theme.of(context).colorScheme.primary,
+                          onPressed: () {
+                            if (widget.isContain!) {
+                              DatabaseService().removeFromStared(data.id,
+                                  data.fullName, data.title, data.department);
+                            } else {
+                              DatabaseService().starNotification(data.id,
+                                  data.fullName, data.title, data.department);
+                            }
+                          },
+                        ),
+                      );
 
-                          SnackBar snackBar = SnackBar(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.onBackground,
-                            dismissDirection: DismissDirection.down,
-                            duration: const Duration(seconds: 2),
-                            behavior: SnackBarBehavior.floating,
-                            content: (widget.isContain!
-                                    ? "Removed"
-                                    : "Notification Saved")
-                                .text
-                                .color(Theme.of(context).colorScheme.background)
-                                .make(),
-                            action: SnackBarAction(
-                              label: 'Undo',
-                              textColor: Theme.of(context).colorScheme.primary,
-                              onPressed: () {
-                                if (widget.isContain!) {
-                                  DatabaseService().removeFromStared(
-                                      data.id,
-                                      data.fullName,
-                                      data.title,
-                                      data.department);
-                                } else {
-                                  DatabaseService().starNotification(
-                                      data.id,
-                                      data.fullName,
-                                      data.title,
-                                      data.department);
-                                }
-                              },
-                            ),
-                          );
-
-                          // Find the ScaffoldMessenger in the widget tree
-                          // and use it to show a SnackBar.
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        },
-                      ),
-                    ),
-                  ),
+                      // Find the ScaffoldMessenger in the widget tree
+                      // and use it to show a SnackBar.
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                  )
+                      .card
+                      .roundedLg
+                      .elevation(0)
+                      .make()
+                      .backgroundColor(Colors.transparent),
                 ],
               ),
               const SizedBox(
@@ -195,7 +182,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
             ],
           ).p(23),
         ]),
-      ).py12(),
+      ).card.rounded.elevation(1).make().py(5).px(0),
     );
   }
 }

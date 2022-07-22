@@ -21,7 +21,6 @@ class _AvatarListState extends State<AvatarList> {
   @override
   void initState() {
     super.initState();
-
     futureFiles = DatabaseService.listAll('assets/avatars/students/');
   }
 
