@@ -27,7 +27,7 @@ class _RegisterState extends State<Register> {
 
   //Text Field
   String? usn;
-  int? sem;
+  String? branch;
   String? email;
   String? password;
   String error = '';
@@ -101,7 +101,7 @@ class _RegisterState extends State<Register> {
                             ).py12(),
                           ).py1(),
                           Row(
-                              // mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextFormField(
                                   inputFormatters: [
@@ -138,32 +138,32 @@ class _RegisterState extends State<Register> {
                                   },
                                 ).px32().py12().w64(context),
                                 SizedBox(
-                                  width: 90,
+                                  width: 110,
+                                  height: 60,
                                   child: DropdownButtonFormField(
                                     decoration: textInputDecoration.copyWith(
                                         fillColor: fillColor,
                                         enabledBorder: enabledBorder,
-                                        hintText: 'sem'),
-                                    items: <int>[
-                                      1,
-                                      2,
-                                      3,
-                                      4,
-                                      5,
-                                      6,
-                                      7,
-                                      8,
-                                    ].map<DropdownMenuItem<int>>((int? value) {
-                                      return DropdownMenuItem<int>(
+                                        hintText: 'branch'),
+                                    items: <String>[
+                                      "CSE",
+                                      "ISE",
+                                      "ECE",
+                                      "CIV",
+                                      "MECH",
+                                      "ISE",
+                                    ].map<DropdownMenuItem<String>>(
+                                        (String? value) {
+                                      return DropdownMenuItem<String>(
                                         value: value,
                                         child: Text(value.toString()),
                                       );
                                     }).toList(),
-                                    onChanged: (value) =>
-                                        setState(() => sem = value as int),
+                                    onChanged: (value) => setState(
+                                        () => branch = value as String),
                                     validator: (value) {
                                       if (value == null) {
-                                        return 'select sem';
+                                        return 'select branch';
                                       }
                                       return null;
                                     },
@@ -232,17 +232,24 @@ class _RegisterState extends State<Register> {
                                             setState(() {
                                               _pageLoading = true;
                                             });
-                                            dynamic result = await _db
-                                                .checkUsn(usn!.toLowerCase());
+                                            dynamic result = await _db.checkUsn(
+                                                usn!.toLowerCase(), branch!);
                                             print(result);
 
-                                            if (!result) {
+                                            if (result == null) {
+                                              setState(() {
+                                                error = 'Unable to register';
+                                                _pageLoading = false;
+                                              });
+                                            }
+
+                                            if (result) {
                                               dynamic authResult = await _auth
                                                   .registerWithEmailAndPassword(
                                                       email!,
                                                       password!,
                                                       usn!.toLowerCase(),
-                                                      sem!);
+                                                      branch!);
                                               if (!authResult) {
                                                 setState(() {
                                                   error =
@@ -252,13 +259,7 @@ class _RegisterState extends State<Register> {
                                               } else {
                                                 loading = true;
                                               }
-                                            } else {
-                                              setState(() {
-                                                error =
-                                                    'USN is already registered or Not available for registration';
-                                                _pageLoading = false;
-                                              });
-                                            }
+                                            } else {}
                                           }
                                         }
                                       : null,

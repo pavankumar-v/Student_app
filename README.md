@@ -1,21 +1,18 @@
 # brindavan_student
 
-A new Flutter project.
+To run Mobile App first install JAVA SDK, Android Studio and flutter SDK
+After installation of flutter SDK set environment variables for the required.
+Then run flutter doctor in command prompt.
+If No errors, open project and run the app through emulator
 
-## Getting Started
+# Teachers Admin SDK
 
-This project is a starting point for a Flutter application.
+Pre Requisits:
+Node js SDK,
+NPM
+Visual Studio Code
 
-A few resources to get you started if this is your first Flutter project:
+Set environment valirables for node js
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-### USN
-
-USN NOT REGISTERED IS FALSE INITIALLY
-USN REGISTERED IS TRUE
+After everything is set open project folder in vs code and type npm start.
+Now open browser and type localhost:3000/ to view the project

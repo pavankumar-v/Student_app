@@ -18,7 +18,6 @@ class Wrapper extends StatelessWidget {
     late User? curUser;
     curUser = auth.currentUser;
     // ignore: avoid_print
-    print('user:$user');
 
     if (user == null) {
       return const Authenticate();

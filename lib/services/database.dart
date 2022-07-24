@@ -20,14 +20,31 @@ class DatabaseService {
   final _auth = FirebaseAuth.instance;
 
   //get usn true or false
-  Future checkUsn(usn) async {
+  Future checkUsn(usn, branch) async {
     try {
       var result = await _db
-          .collection('usncollection')
-          .doc('mq6CKVtsEqBoCJvMyeQQ')
+          .collection('branch/${branch.toString().toLowerCase()}/others')
+          .doc('usncollection')
           .get()
           .then((doc) => doc.data()![usn]);
+
+      print("usn result $result");
+
       return result;
+    } catch (e) {
+      print("usn error");
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<dynamic> getDetails() async {
+    try {
+      return await _db
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .get()
+          .then((value) => value.data()!);
     } catch (e) {
       print(e.toString());
       return null;
@@ -35,12 +52,12 @@ class DatabaseService {
   }
 
   // set usn used
-  Future setUsnUsed(usn) async {
+  Future setUsnUsed(usn, branch) async {
     try {
       return await _db
-          .collection('usncollection')
-          .doc('mq6CKVtsEqBoCJvMyeQQ')
-          .set({usn: true}, SetOptions(merge: true)).then(
+          .collection("branch/${branch.toString().toLowerCase()}/others")
+          .doc('usncollection')
+          .set({usn: false}, SetOptions(merge: true)).then(
         (_) => print('success'),
       );
     } catch (e) {
@@ -51,6 +68,11 @@ class DatabaseService {
   // Upsert
   Future updateUserData(String usn, String fullName, int sem, String section,
       String branch) async {
+    print(fullName);
+    print(usn);
+    print(branch);
+    print(sem);
+    print(section);
     try {
       var url =
           'https://firebasestorage.googleapis.com/v0/b/brindavan-student-app.appspot.com/o/assets%2Favatars%2Fstudents%2Fdefault.png?alt=media&token=9ccbf074-a4e0-41bf-bba7-6fef4c4c54bf';
@@ -196,21 +218,6 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) =>
             snapshot.docs.map((doc) => Subjects.fromJson(doc.data())).toList());
-  }
-
-  Future<dynamic> getUsn() async {
-    try {
-      dynamic result;
-      result = await _db
-          .collection('users')
-          .doc(_auth.currentUser!.uid)
-          .get()
-          .then((value) => value.data()!);
-      return result;
-    } catch (e) {
-      print('error$e');
-      return null;
-    }
   }
 
   Future<dynamic> getImg() {

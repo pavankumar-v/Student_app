@@ -67,33 +67,20 @@ class _VerifyScreenState extends State<VerifyScreen> {
           );
   }
 
-  Future<dynamic> getUsn() async {
-    try {
-      return await _db
-          .collection('users')
-          .doc(user.uid)
-          .get()
-          .then((value) => value.data()!['usn']);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
   Future<void> checkEmailVerified() async {
     user = auth.currentUser!;
     await user.reload();
 
     if (user.emailVerified) {
-      dynamic usn = await getUsn();
-      print('usn:' + usn);
+      dynamic user = await DatabaseService().getDetails();
       // getUsn();
-      dynamic result = await DatabaseService().setUsnUsed(usn.toString());
-
-      print('hello' + result.toString());
+      dynamic result = await DatabaseService().setUsnUsed(
+          user['usn'].toString().toLowerCase(),
+          user['branch'].toString().toLowerCase());
+      print(result.toString());
       timer.cancel();
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => const Wrapper()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const Wrapper()));
     }
   }
 }

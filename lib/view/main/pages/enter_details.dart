@@ -22,16 +22,15 @@ class _EnterDetailsState extends State<EnterDetails> {
 
   String? _fullName;
 
-  String? _branch;
+  int? _sem;
 
   String? _section;
-
 
   bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    final DatabaseService _db = DatabaseService();
+    final DatabaseService db = DatabaseService();
     var enabledBorder = OutlineInputBorder(
         borderSide: BorderSide(color: Theme.of(context).hintColor));
     var fillColor = Theme.of(context).cardColor;
@@ -47,7 +46,6 @@ class _EnterDetailsState extends State<EnterDetails> {
                 key: _formKey,
                 child: Column(
                   children: [
-                   
                     TextFormField(
                       maxLength: 30,
                       textCapitalization: TextCapitalization.sentences,
@@ -65,38 +63,35 @@ class _EnterDetailsState extends State<EnterDetails> {
                       },
                       // controller: nameController,
                       validator: (val) {
-                        if (val!.isEmpty) {
+                        if (val!.trim().isEmpty) {
                           return 'This field is required';
                         } else if (!RegExp(r"[A-Za-z\s]+$")
-                            .hasMatch(val.toUpperCase())) {
+                            .hasMatch(val.trim().toUpperCase())) {
                           return 'Special characters & numbers not allowed';
-                        } else if (!val.contains(RegExp(r"[A-Za-z]+$"))) {
+                        } else if (!val
+                            .trim()
+                            .contains(RegExp(r"[A-Za-z]+$"))) {
                           return 'Invalid name';
-                        } else if (val.length < 4) {
+                        } else if (val.trim().length < 4) {
                           return 'Enter Valid Name';
                         }
 
                         return null;
                       },
                     ),
-                    DropdownButtonFormField<String>(
+                    DropdownButtonFormField<int>(
                       decoration: textInputDecoration.copyWith(
-                          hintText: 'Select Branch',
+                          hintText: 'Select sem',
                           enabledBorder: enabledBorder,
                           fillColor: fillColor),
-                      items: <String>[
-                        'CSE',
-                        'MECH',
-                        'CIV',
-                        'ECE',
-                        'ISE',
-                      ].map<DropdownMenuItem<String>>((String? value) {
-                        return DropdownMenuItem<String>(
+                      items: <int>[1, 2, 3, 4, 5, 6, 7, 8]
+                          .map<DropdownMenuItem<int>>((int? value) {
+                        return DropdownMenuItem<int>(
                           value: value,
                           child: Text(value.toString()),
                         );
                       }).toList(),
-                      onChanged: (value) => setState(() => _branch = value),
+                      onChanged: (value) => setState(() => _sem = value as int),
                       validator: (value) {
                         if (value == null) {
                           return 'select sem';
@@ -139,21 +134,20 @@ class _EnterDetailsState extends State<EnterDetails> {
                             ),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                    
-                                             Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) => const Wrapper()));
+                                print(_sem);
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => const Wrapper()));
                                 dynamic result =
-                                    await DatabaseService(branch: _branch)
+                                    await DatabaseService(sem: _sem!.toString())
                                         .updateUserData(
                                             widget.userData.usn,
                                             _fullName!,
-                                            widget.userData.sem!,
+                                            _sem!.toInt(),
                                             _section!,
-                                            _branch!);
+                                            widget.userData.branch);
 
-                                
-                              
+                                print(result);
                               }
                             },
                             child: 'SUBMIT'.text.white.make().p16().px1())
