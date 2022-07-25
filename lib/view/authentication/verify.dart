@@ -5,8 +5,8 @@ import 'package:brindavan_student/services/database.dart';
 import 'package:brindavan_student/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class VerifyScreen extends StatefulWidget {
   const VerifyScreen({Key? key}) : super(key: key);
@@ -48,21 +48,122 @@ class _VerifyScreenState extends State<VerifyScreen> {
     return loading
         ? const Loading()
         : Scaffold(
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                "An email has been sent to ${user.email} please verify"
-                    .text
-                    .center
-                    .make()
-                    .p12(),
-                "Do not close the App. \n You will be automatically redirected to the home screen after you verify your email."
-                    .text
-                    .red500
-                    .center
-                    .make()
-                    .p12(),
-              ],
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.done,
+                    size: 30,
+                    color: Colors.white,
+                  ).p20().card.circular.color(Colors.green).make(),
+                  "Verify Email".text.bold.xl2.lineHeight(1.5).make(),
+                  "Verification link sent to \n ${user.email}"
+                      .text
+                      .lg
+                      .lineHeight(1.5)
+                      .center
+                      .make()
+                      .p12(),
+                  "Stay On Page".text.bold.xl.center.make().p12(),
+
+                  // Align(
+                  //   alignment: Alignment.bottomCenter,
+                  //   child: Container(
+                  //     margin: const EdgeInsets.all(5),
+                  //     width: double.infinity,
+                  //     child: ElevatedButton(
+                  //       onPressed: () async {
+                  //         setState(() {
+                  //           loading = true;
+                  //         });
+                  //         await _auth.signOut();
+                  //       },
+                  //       child: "Sign Out".text.lg.make().py16(),
+                  //     ).p12(),
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                showModalBottomSheet<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: MediaQuery.of(context).size.height / 3,
+                      color: Theme.of(context).colorScheme.background,
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            "If you are facing any issues :"
+                                .text
+                                .xl
+                                .bold
+                                .color(Theme.of(context).hintColor)
+                                .make(),
+
+                            "1. Try checking your spam for the email verification link 📧"
+                                .text
+                                .lg
+                                .make()
+                                .py12(),
+                            "2. Try Signing out and signing in again."
+                                .text
+                                .lg
+                                .make()
+                                .py12(),
+                            InkWell(
+                              child: 'sign out'
+                                  .text
+                                  .base
+                                  .color(Theme.of(context).primaryColor)
+                                  .underline
+                                  .make(),
+                              onTap: () async {
+                                Navigator.pop(context);
+                                setState(() {
+                                  loading = true;
+                                });
+
+                                await _auth.signOut();
+                              },
+                            ),
+                            "3. Raise issue if any of the following doesn't work"
+                                .text
+                                .lg
+                                .make()
+                                .py12(),
+                            InkWell(
+                              child: 'Rise Issue'
+                                  .text
+                                  .base
+                                  .color(Theme.of(context).primaryColor)
+                                  .underline
+                                  .make(),
+                              onTap: () async {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            // ElevatedButton(
+                            //   child: const Text('Close BottomSheet'),
+                            //   onPressed: () => Navigator.pop(context),
+                            // )
+                          ],
+                        ).p12(),
+                      ),
+                    );
+                  },
+                );
+              },
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: Icon(
+                Icons.info_rounded,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
           );
   }

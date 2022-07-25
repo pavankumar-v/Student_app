@@ -70,16 +70,13 @@ class _RegisterState extends State<Register> {
                             ),
                             child: logo,
                           ).p12(),
-                          Container(
-                            child: 'Register'
-                                .text
-                                .xl5
-                                .fontWeight(FontWeight.bold)
-                                .make(),
-                          ).py16(),
-                          Container(
-                            child: 'Create account'.text.base.make(),
-                          ).py1(),
+                          'Register'
+                              .text
+                              .xl5
+                              .fontWeight(FontWeight.bold)
+                              .make()
+                              .py12(),
+                          'Create account'.text.base.make().py1(),
                           Container(
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,6 +98,7 @@ class _RegisterState extends State<Register> {
                             ).py12(),
                           ).py1(),
                           Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextFormField(
@@ -136,11 +134,12 @@ class _RegisterState extends State<Register> {
                                     }
                                     return null;
                                   },
-                                ).px32().py12().w64(context),
+                                ).w48(context),
                                 SizedBox(
                                   width: 110,
                                   height: 60,
                                   child: DropdownButtonFormField(
+                                    isExpanded: true,
                                     decoration: textInputDecoration.copyWith(
                                         fillColor: fillColor,
                                         enabledBorder: enabledBorder,
@@ -151,7 +150,6 @@ class _RegisterState extends State<Register> {
                                       "ECE",
                                       "CIV",
                                       "MECH",
-                                      "ISE",
                                     ].map<DropdownMenuItem<String>>(
                                         (String? value) {
                                       return DropdownMenuItem<String>(
@@ -193,7 +191,7 @@ class _RegisterState extends State<Register> {
                               }
                               return null;
                             },
-                          ).px32().py12(),
+                          ).py12(),
                           TextFormField(
                             obscureText: isHiddenPassword,
                             decoration: textInputDecoration.copyWith(
@@ -220,7 +218,7 @@ class _RegisterState extends State<Register> {
                               }
                               return null;
                             },
-                          ).px32().py12(),
+                          ).pOnly(top: 12),
                           ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       primary: Theme.of(context).primaryColor),
@@ -237,8 +235,12 @@ class _RegisterState extends State<Register> {
                                             print(result);
 
                                             if (result == null) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackbar(
+                                                      context,
+                                                      'Unable to register with the USN',
+                                                      5));
                                               setState(() {
-                                                error = 'Unable to register';
                                                 _pageLoading = false;
                                               });
                                             }
@@ -251,21 +253,32 @@ class _RegisterState extends State<Register> {
                                                       usn!.toLowerCase(),
                                                       branch!);
                                               if (!authResult) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackbar(
+                                                        context,
+                                                        'The email address is already in use by another account',
+                                                        5));
                                                 setState(() {
-                                                  error =
-                                                      'The email address is already in use by another account';
                                                   _pageLoading = false;
                                                 });
                                               } else {
                                                 loading = true;
                                               }
-                                            } else {}
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackbar(
+                                                      context,
+                                                      'Unable to register with the USN',
+                                                      5));
+                                              setState(() {
+                                                _pageLoading = false;
+                                              });
+                                            }
                                           }
                                         }
                                       : null,
                                   child: 'REGISTER'
                                       .text
-                                      .sm
                                       .bold
                                       .white
                                       .make()
@@ -278,7 +291,7 @@ class _RegisterState extends State<Register> {
                           error.text.red500.center.make().px24().py12()
                         ],
                       ).p12().py64(),
-                    ),
+                    ).px16(),
                   ),
                 ),
               ),

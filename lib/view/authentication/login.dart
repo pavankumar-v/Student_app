@@ -178,8 +178,12 @@ class _LoginState extends State<Login> {
                                                     email, password);
                                             if (!result) {
                                               setState(() {
-                                                error =
-                                                    'Either email is not registered or password is wrong';
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackbar(
+                                                        context,
+                                                        "Error signing in please check your email and password",
+                                                        5));
+
                                                 _pageLoading = false;
                                               });
                                             } else {

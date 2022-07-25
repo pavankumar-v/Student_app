@@ -14,18 +14,14 @@ var loader = SizedBox(
 
 // INPUT DECORATION
 var textInputDecoration = InputDecoration(
-  
   errorBorder: const OutlineInputBorder(
-    
-    borderSide: BorderSide(color: Colors.red, width: 1.0)
-  ),
+      borderSide: BorderSide(color: Colors.red, width: 1.0)),
   focusedBorder: OutlineInputBorder(
     borderSide: BorderSide(color: primaryColor, width: 2.0),
   ),
   filled: true,
   focusedErrorBorder: const OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.red, width: 1.0)
-  ),
+      borderSide: BorderSide(color: Colors.red, width: 1.0)),
 );
 
 // BACKGROUND IMAGE
@@ -33,7 +29,9 @@ const backgroundImage = BoxDecoration(
   image: DecorationImage(
     // colorFilter:
     //     ColorFilter.mode(Colors.white.withOpacity(0.05), BlendMode.dstATop),
-    image:  AssetImage('assets/images/background-01.png', ),
+    image: AssetImage(
+      'assets/images/background-01.png',
+    ),
     fit: BoxFit.cover,
   ),
 );
@@ -42,8 +40,15 @@ const backgroundImage = BoxDecoration(
 final logo = Card(
   semanticContainer: true,
   clipBehavior: Clip.antiAliasWithSaveLayer,
+  shape: RoundedRectangleBorder(
+    side: const BorderSide(color: Colors.white, width: 0),
+    borderRadius: BorderRadius.circular(25.0),
+  ),
+  margin: const EdgeInsets.all(0.0),
+  elevation: 0.0,
+  color: Colors.white,
   child: Padding(
-    padding: EdgeInsets.all(10),
+    padding: const EdgeInsets.all(10),
     child: Image.asset(
       'assets/images/logo.png',
       fit: BoxFit.cover,
@@ -51,11 +56,16 @@ final logo = Card(
       height: 60,
     ),
   ),
-  shape: RoundedRectangleBorder(
-    side: BorderSide(color: Colors.white, width: 0),
-    borderRadius: BorderRadius.circular(25.0),
-  ),
-  margin: EdgeInsets.all(0.0),
-  elevation: 0.0,
-  color: Colors.white,
 );
+
+SnackBar snackbar(context, message, duration) {
+  SnackBar snackBar = SnackBar(
+    backgroundColor: Theme.of(context).colorScheme.onBackground,
+    dismissDirection: DismissDirection.down,
+    duration: Duration(seconds: duration),
+    behavior: SnackBarBehavior.floating,
+    content:
+        "$message".text.color(Theme.of(context).colorScheme.background).make(),
+  );
+  return snackBar;
+}
